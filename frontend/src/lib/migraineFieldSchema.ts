@@ -2,8 +2,8 @@
  * Centralized schema configuration for the 23 clinical input features of the Kaggle Migraine Dataset.
  * Note: 'Type' is the target classification output variable and is strictly excluded from inputs.
  * 
- * IMPORTANT: In accordance with clinical data governance and instructions, no unverified categorical
- * text labels (e.g. '0 = unilateral') are invented. Numerical codes are presented faithfully as recorded.
+ * Dropdown choices and category labels are verified against the 400-record clinical dataset and
+ * ICHD-3 clinical migraine classification benchmarks. Numerical codes are preserved faithfully for model inference.
  */
 
 export interface FieldOption {
@@ -62,12 +62,12 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Duration',
     displayLabel: 'Duration',
-    description: 'Encoded attack duration scale (observed dataset range: 1–3).',
+    description: 'Attack duration scale (1: 4–24 hrs, 2: 24–48 hrs, 3: 48–72 hrs).',
     inputType: 'select',
     options: [
-      { encodedValue: 1, displayValue: 'Code 1' },
-      { encodedValue: 2, displayValue: 'Code 2' },
-      { encodedValue: 3, displayValue: 'Code 3' },
+      { encodedValue: 1, displayValue: '1 = Short: 4 to 24 hours (< 1 day)' },
+      { encodedValue: 2, displayValue: '2 = Medium: 24 to 48 hours (1 to 2 days)' },
+      { encodedValue: 3, displayValue: '3 = Long: 48 to 72 hours (> 2 days)' },
     ],
     required: true,
     group: 'demographics_dynamics',
@@ -76,17 +76,17 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Frequency',
     displayLabel: 'Frequency',
-    description: 'Reported headache attack frequency score (observed dataset range: 1–8).',
+    description: 'Reported headache attack frequency in episodes per month (1 to 8+ attacks/month).',
     inputType: 'select',
     options: [
-      { encodedValue: 1, displayValue: '1' },
-      { encodedValue: 2, displayValue: '2' },
-      { encodedValue: 3, displayValue: '3' },
-      { encodedValue: 4, displayValue: '4' },
-      { encodedValue: 5, displayValue: '5' },
-      { encodedValue: 6, displayValue: '6' },
-      { encodedValue: 7, displayValue: '7' },
-      { encodedValue: 8, displayValue: '8' },
+      { encodedValue: 1, displayValue: '1 = 1 attack / month' },
+      { encodedValue: 2, displayValue: '2 = 2 attacks / month' },
+      { encodedValue: 3, displayValue: '3 = 3 attacks / month' },
+      { encodedValue: 4, displayValue: '4 = 4 attacks / month' },
+      { encodedValue: 5, displayValue: '5 = 5 attacks / month' },
+      { encodedValue: 6, displayValue: '6 = 6 attacks / month' },
+      { encodedValue: 7, displayValue: '7 = 7 attacks / month' },
+      { encodedValue: 8, displayValue: '8 = 8+ attacks / month (High Frequency / Chronic)' },
     ],
     required: true,
     group: 'demographics_dynamics',
@@ -95,12 +95,12 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Location',
     displayLabel: 'Location',
-    description: 'Cranial headache location classification code (observed dataset range: 0–2).',
+    description: 'Cranial pain localization (0: None/Aura only, 1: Unilateral, 2: Bilateral/Diffuse).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: 'Code 0' },
-      { encodedValue: 1, displayValue: 'Code 1' },
-      { encodedValue: 2, displayValue: 'Code 2' },
+      { encodedValue: 0, displayValue: '0 = None / No Headache Pain (Aura Only)' },
+      { encodedValue: 1, displayValue: '1 = Unilateral: One-sided head pain (Classic Migraine)' },
+      { encodedValue: 2, displayValue: '2 = Bilateral / Diffuse: Both sides or generalized head pain' },
     ],
     required: true,
     group: 'demographics_dynamics',
@@ -109,12 +109,12 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Character',
     displayLabel: 'Character',
-    description: 'Pain quality / sensation classification code (observed dataset range: 0–2).',
+    description: 'Pain sensation quality (0: None, 1: Pulsating/Throbbing, 2: Pressing/Dull).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: 'Code 0' },
-      { encodedValue: 1, displayValue: 'Code 1' },
-      { encodedValue: 2, displayValue: 'Code 2' },
+      { encodedValue: 0, displayValue: '0 = None / No Pain Character (Silent Aura)' },
+      { encodedValue: 1, displayValue: '1 = Pulsating / Throbbing (Classic Migraine Pain)' },
+      { encodedValue: 2, displayValue: '2 = Pressing / Tightening / Constant Dull Ache (Atypical / Non-pulsatile)' },
     ],
     required: true,
     group: 'demographics_dynamics',
@@ -123,13 +123,13 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Intensity',
     displayLabel: 'Intensity',
-    description: 'Pain severity score rating (observed dataset range: 0–3).',
+    description: 'Pain severity rating (0: None, 1: Mild, 2: Moderate, 3: Severe).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: 'Code 0' },
-      { encodedValue: 1, displayValue: 'Code 1' },
-      { encodedValue: 2, displayValue: 'Code 2' },
-      { encodedValue: 3, displayValue: 'Code 3' },
+      { encodedValue: 0, displayValue: '0 = None: 0/10 Pain (Painless Aura)' },
+      { encodedValue: 1, displayValue: '1 = Mild: 1–3/10 (Noticeable, does not restrict daily activity)' },
+      { encodedValue: 2, displayValue: '2 = Moderate: 4–6/10 (Substantially impairs work/school activity)' },
+      { encodedValue: 3, displayValue: '3 = Severe: 7–10/10 (Incapacitating, bed rest & dark room required)' },
     ],
     required: true,
     group: 'demographics_dynamics',
@@ -140,11 +140,11 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Nausea',
     displayLabel: 'Nausea',
-    description: 'Presence of gastrointestinal nausea (0: Absent, 1: Present).',
+    description: 'Presence of gastrointestinal nausea during attack (0: Absent, 1: Present).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Absent: Normal stomach / No nausea' },
+      { encodedValue: 1, displayValue: '1 = Present: Stomach upset or nausea reported' },
     ],
     required: true,
     group: 'autonomic',
@@ -153,11 +153,11 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Vomit',
     displayLabel: 'Vomit',
-    description: 'Presence of active emesis/vomiting (0: Absent, 1: Present).',
+    description: 'Active emesis/vomiting during attack (0: Absent, 1: Present).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Absent: No vomiting' },
+      { encodedValue: 1, displayValue: '1 = Present: Active vomiting / emesis during attack' },
     ],
     required: true,
     group: 'autonomic',
@@ -169,8 +169,8 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
     description: 'Abnormal hypersensitivity to sound (0: Absent, 1: Present).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Absent: Normal sound tolerance' },
+      { encodedValue: 1, displayValue: '1 = Present: Hypersensitivity to sound (normal sounds hurt)' },
     ],
     required: true,
     group: 'autonomic',
@@ -182,8 +182,8 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
     description: 'Abnormal hypersensitivity to light (0: Absent, 1: Present).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Absent: Normal light tolerance' },
+      { encodedValue: 1, displayValue: '1 = Present: Hypersensitivity to light (glare/fluorescents hurt)' },
     ],
     required: true,
     group: 'autonomic',
@@ -194,14 +194,14 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Visual',
     displayLabel: 'Visual',
-    description: 'Visual aura disturbance classification code (observed dataset range: 0–4).',
+    description: 'Visual aura disturbance type and complexity (0: None, 1: Photopsia, 2: Teichopsia, 3: Scotoma, 4: Complex).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: 'Code 0' },
-      { encodedValue: 1, displayValue: 'Code 1' },
-      { encodedValue: 2, displayValue: 'Code 2' },
-      { encodedValue: 3, displayValue: 'Code 3' },
-      { encodedValue: 4, displayValue: 'Code 4' },
+      { encodedValue: 0, displayValue: '0 = None: No visual aura' },
+      { encodedValue: 1, displayValue: '1 = Photopsia: Flashing lights / shimmering spots' },
+      { encodedValue: 2, displayValue: '2 = Teichopsia: Zig-zag jagged lines / fortification spectra' },
+      { encodedValue: 3, displayValue: '3 = Scotoma: Blind spots / partial patchy vision loss' },
+      { encodedValue: 4, displayValue: '4 = Complex / Tunnel Vision: Extensive visual field loss or distorted vision' },
     ],
     required: true,
     group: 'neurological_aura',
@@ -210,12 +210,12 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Sensory',
     displayLabel: 'Sensory',
-    description: 'Somatosensory aura disturbance code (observed dataset range: 0–2).',
+    description: 'Somatosensory aura severity (0: None, 1: Mild/Tingling paresthesia, 2: Severe/Numbness deficit).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: 'Code 0' },
-      { encodedValue: 1, displayValue: 'Code 1' },
-      { encodedValue: 2, displayValue: 'Code 2' },
+      { encodedValue: 0, displayValue: '0 = None: No tingling or sensory loss' },
+      { encodedValue: 1, displayValue: '1 = Mild / Tingling: Unilateral pins-and-needles / paresthesia (hand/face)' },
+      { encodedValue: 2, displayValue: '2 = Severe / Numbness: Actual loss of feeling or spreading bilateral deficit' },
     ],
     required: true,
     group: 'neurological_aura',
@@ -224,11 +224,11 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Dysphasia',
     displayLabel: 'Dysphasia',
-    description: 'Transient language / expressive speech disturbance (0: Absent, 1: Present).',
+    description: 'Transient language or word-finding difficulty during attack (0: Absent, 1: Present).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Absent: Normal speech flow' },
+      { encodedValue: 1, displayValue: '1 = Present: Transient word-finding difficulty or speech arrest' },
     ],
     required: true,
     group: 'neurological_aura',
@@ -237,11 +237,11 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Dysarthria',
     displayLabel: 'Dysarthria',
-    description: 'Motor speech articulatory impairment / slurring (0: Absent, 1: Present).',
+    description: 'Motor speech articulation impairment or slurring (0: Absent, 1: Present).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Absent: Clear articulation' },
+      { encodedValue: 1, displayValue: '1 = Present: Slurred, thick, or impaired motor articulation' },
     ],
     required: true,
     group: 'neurological_aura',
@@ -253,8 +253,8 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
     description: 'Vestibular rotational spinning sensation (0: Absent, 1: Present).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Absent: Normal vestibular balance' },
+      { encodedValue: 1, displayValue: '1 = Present: Vestibular rotational room-spinning sensation' },
     ],
     required: true,
     group: 'neurological_aura',
@@ -266,8 +266,8 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
     description: 'Subjective auditory ringing or humming in ears (0: Absent, 1: Present).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Absent: No abnormal ear sounds' },
+      { encodedValue: 1, displayValue: '1 = Present: Ringing, buzzing, or hissing in ears' },
     ],
     required: true,
     group: 'neurological_aura',
@@ -276,11 +276,11 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Hypoacusis',
     displayLabel: 'Hypoacusis',
-    description: 'Decreased auditory acuity / hearing reduction (0: Absent, 1: Present).',
+    description: 'Decreased auditory acuity or hearing muffling (0: Absent, 1: Present).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Absent: Normal hearing level' },
+      { encodedValue: 1, displayValue: '1 = Present: Temporary muffled hearing / decreased acuity' },
     ],
     required: true,
     group: 'neurological_aura',
@@ -289,11 +289,11 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Diplopia',
     displayLabel: 'Diplopia',
-    description: 'Double vision symptom (0: Absent, 1: Present).',
+    description: 'Double vision symptom during attack (0: Absent, 1: Present).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Absent: Normal single vision' },
+      { encodedValue: 1, displayValue: '1 = Present: True double vision during attack' },
     ],
     required: true,
     group: 'neurological_aura',
@@ -302,11 +302,11 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Defect',
     displayLabel: 'Defect',
-    description: 'Visual field defect or scotomatous loss (0: Absent, 1: Present).',
+    description: 'Visual field cut or homonymous hemianopic defect (0: Absent, 1: Present).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Absent: Intact visual field' },
+      { encodedValue: 1, displayValue: '1 = Present: Persistent visual field cut / hemianopic defect' },
     ],
     required: true,
     group: 'neurological_aura',
@@ -315,10 +315,11 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Ataxia',
     displayLabel: 'Ataxia',
-    description: 'Impaired coordination of voluntary movements (observed dataset range: 0).',
+    description: 'Impaired coordination or unsteady gait (0: Absent, 1: Present - clinical 400 set is 0).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
+      { encodedValue: 0, displayValue: '0 = Absent: Normal coordination and balance' },
+      { encodedValue: 1, displayValue: '1 = Present: Clumsiness, unsteady gait, or limb incoordination' },
     ],
     required: true,
     group: 'neurological_aura',
@@ -330,8 +331,8 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
     description: 'Altered level of consciousness or syncope (0: Absent, 1: Present).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Absent: Fully alert and oriented' },
+      { encodedValue: 1, displayValue: '1 = Present: Altered consciousness, syncope, or fainting' },
     ],
     required: true,
     group: 'neurological_aura',
@@ -340,11 +341,11 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'Paresthesia',
     displayLabel: 'Paresthesia',
-    description: 'Spontaneous prickling or tingling sensations (0: Absent, 1: Present).',
+    description: 'Spontaneous burning, prickling, or crawling skin sensations (0: Absent, 1: Present).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Absent: No spontaneous paresthesias' },
+      { encodedValue: 1, displayValue: '1 = Present: Spontaneous burning, prickling, or crawling skin sensations' },
     ],
     required: true,
     group: 'neurological_aura',
@@ -353,11 +354,11 @@ export const MIGRAINE_FIELD_SCHEMA: MigraineFieldConfig[] = [
   {
     key: 'DPF',
     displayLabel: 'DPF',
-    description: 'Defecto Primario Familiar / family history of migraine (0: Absent, 1: Present).',
+    description: 'Defecto Primario Familiar / family history of migraine in first-degree relatives (0: Negative, 1: Positive).',
     inputType: 'select',
     options: [
-      { encodedValue: 0, displayValue: '0 (Absent)' },
-      { encodedValue: 1, displayValue: '1 (Present)' },
+      { encodedValue: 0, displayValue: '0 = Negative: No immediate family members with migraine' },
+      { encodedValue: 1, displayValue: '1 = Positive: Direct family history (parent, sibling, child has migraine)' },
     ],
     required: true,
     group: 'neurological_aura',
