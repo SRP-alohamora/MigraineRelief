@@ -63,6 +63,16 @@ const RESEARCH_NEWS: NewsItem[] = [
     takeaway: 'Achieved significant pain relief without sedative medication side effects, ideal for high school students during exam periods.',
     pmid: '37894210',
   },
+  {
+    id: '6',
+    title: "2026 US Emergency Department Guidelines: Class A 'Must Offer' Recommendations",
+    journal: 'American Headache Society (AHS) / Dr. Jennifer Robblee Consensus',
+    date: 'January 2026',
+    category: 'Clinical Guidelines',
+    summary: "Dr. Jennifer Robblee presented the updated 2026 US Emergency Department guidelines elevating IV prochlorperazine and Greater Occipital Nerve Blocks (including for teens) to Class A ('Must Offer') status, while designating IV opioids as Class A ('Must NOT Offer').",
+    takeaway: 'Prioritizes parenteral dopamine antagonism (PMID: 11335783) and occipital nerve blocks (PMID: 29124490) to abort intractable status migrainosus without habituation.',
+    pmid: '11335783',
+  },
 ];
 
 export const LatestResearchNews: React.FC = () => {

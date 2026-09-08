@@ -22,6 +22,12 @@ Existing digital health tools fail sufferers at this critical moment:
 
 Rather than blaming arbitrary foods or making unvalidated 24-hour predictions, MigraineRelief matches patient phenotype, prodrome velocity, gastric motility state, and allodynia onset to the optimal abortive molecule, delivery route (oral vs. non-oral), and adjuvant antiemetic—while strictly enforcing Medication Overuse Headache (MOH) safety envelopes.
 
+#### Foundational Definitions & Educational References
+* **Prodrome Markers**: *Prodrome markers are early physical, behavioral, or biological signs that appear before a disease is fully diagnosed or reaches its severe phase.* In migraine, hypothalamic and brainstem activation produces subtle prodromal signals (neck stiffness, yawning, fluid retention, mood swings, photophobia) hours before headache pain strikes.
+  * Educational Video: [(The role of prodromal symptoms in predicting headache onset)](https://www.youtube.com/watch?v=9MIx21I1FRY&t=223s)
+* **Contemporary Acute Pharmacotherapies**: For a comprehensive clinical reference on acute migraine medications across age groups, formulation routes, and efficacy ladders:
+  * Clinical Reference: [Acute Migraine Treatment & Medications Guide (CPS Position Statement)](https://cps.ca/en/documents/position/acute-migraine)
+
 By instrumenting a closed loop between **Context → Intervention → Timing → Response → Outcome**, MigraineRelief builds the world's first proprietary **Intervention-Response Graph**, turning acute rescue failure into a predictable, compoundable science.
 
 ---
@@ -37,10 +43,20 @@ Migraine is not "just a headache." It is an agonizing, complex neurovascular dis
 3. **Acute Autonomic Gastroparesis (Gastric Stasis)**: Within 30–60 minutes of attack onset, sympathetic outflow shuts down gastric emptying. Oral medications get trapped in the stomach, delayed from reaching the duodenum for absorption (Aurora et al., *Headache* 2022).
 4. **The Race Against Central Sensitization (Cutaneous Allodynia)**: Within 60–120 minutes of headache onset, second-order neurons in the trigeminocervical complex and third-order neurons in the thalamus become sensitized. Once cutaneous allodynia locks in (scalp/skin sensitivity where light touch feels like burning embers), peripheral abortive medications (such as oral triptans) fail to abort pain (Burstein et al., *Ann Neurol* 2004).
 
-### 2.2 The Three Clinical Tragedies
+### 2.2 Updated 2026 US Emergency Department (ED) Migraine Guidelines
+*(American Headache Society Consensus led by Dr. Jennifer Robblee)*
+
+In the updated clinical consensus for acute migraine in emergency and urgent care settings, the evidence base was formally restructured around non-opioid, mechanistically targeted parenterals. Dr. Jennifer Robblee and colleagues established two **Level A ("Must Offer")** recommendations:
+1. **Intravenous (IV) Prochlorperazine (prochlorazine)**: Dopamine antagonist with potent antiemetic and central analgesic properties, clinically demonstrated to outperform hydromorphone without addiction liability ([PubMed: 11335783](https://pubmed.ncbi.nlm.nih.gov/11335783/)).
+2. **Greater Occipital Nerve Blocks (GONB) for Migraine Patients Including Teens**: Target peripheral infiltration with local anesthetics (bupivacaine/lidocaine) that rapidly quiets afferent inputs to the trigeminocervical complex, providing effective relief even in pediatric and adolescent refractory migraine ([Nerve Blocks in Pediatric and Adolescent Headache Disorders, PubMed: 29124490](https://pubmed.ncbi.nlm.nih.gov/29124490/)).
+3. **Opioid Restriction ("Must NOT Offer")**: Level A recommendation explicitly against IV hydromorphone and IV opioids due to proven lack of efficacy and high risk of perpetuating chronic transformation and rebound headache.
+* Guideline Discussion & Overview: [Dr. Jennifer Robblee SGEM Presentation](https://thesgem.com/2026/01/sgem-xtra-hit-me-with-your-best-block-2025-ahs-ed-migraine-guidelines/) | [YouTube Video Overview](https://www.youtube.com/watch?v=JmYj-90V63w)
+
+### 2.3 The Three Clinical Tragedies
 * **The Acute Rescue Failure Roulette**: 30% to 50% of acute migraine rescue attempts fail because medications are taken too late or administered orally during gastric stasis, leading to violent vomiting fits, prolonged disability, and emergency department visits.
 * **The Medication Overuse Headache (MOH) Trap**: Sufferers taking triptans/ergots/opioids on $\ge 10$ days/month or NSAIDs on $\ge 15$ days/month transform episodic migraine into daily chronic refractory agony, unaware that their rescue medication is perpetuating the cycle.
 * **The Privacy & Surveillance Barrier**: Traditional digital health tools collect invasive Protected Health Information (PHI), selling aggregate data to advertisers and insurers, creating severe adoption resistance among privacy-sensitive users.
+
 
 ---
 

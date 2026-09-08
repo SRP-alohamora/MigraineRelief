@@ -22,6 +22,18 @@ To build a category-defining, clinically authoritative, and venture-defensible c
 3. **Compound with Scale**: By instrumenting the **Context → Intervention → Timing → Response → Outcome** loop with ultra-low friction (<3 taps during an attack), MigraineRelief builds a closed-loop dataset that compounds in predictive precision with every attack, creating an insurmountable clinical data moat.
 4. **Bootstrapping the Day-0 Cold Start (Operating with Only Public Data)**: Starting with zero proprietary user data is our initial reality. On Day 0, MigraineRelief creates immediate clinical value without ML hallucination by pairing deterministic clinical protocols (ICHD-3/SNOOP4/MOH guardrails) with literature-derived Bayesian pharmacokinetic priors and exploratory lifestyle correlation priors extracted from public datasets (e.g., Kaggle lifestyle/wearable streams). Rapid N-of-1 personalization occurs after a single user logs their first 3–5 attacks, creating immediate personal utility while bootstrapping the global dataset.
 
+### Key Clinical Concepts & Updated Guidelines
+* **Prodrome Markers**: *Prodrome markers are early physical, behavioral, or biological signs that appear before a disease is fully diagnosed or reaches its severe phase.* In migraine, hypothalamic and brainstem activation produces subtle prodromal signals (neck stiffness, yawning, fluid retention, mood swings, photophobia) hours before headache pain strikes.
+  * Watch: [(The role of prodromal symptoms in predicting headache onset)](https://www.youtube.com/watch?v=9MIx21I1FRY&t=223s)
+* **Contemporary Acute Pharmacotherapy Reference**:
+  * Read: [Acute Migraine Treatment & Medications Guide (CPS)](https://cps.ca/en/documents/position/acute-migraine)
+* **Updated 2026 US Emergency Department (ED) Guidelines (AHS Consensus led by Dr. Jennifer Robblee)**:
+  * In the updated 2025/2026 AHS Emergency Department guidelines, two parenteral therapies are elevated to **Level A ("Must Offer")** recommendations:
+    1. **Intravenous (IV) Prochlorperazine (prochlorazine)**: Dopamine antagonist outperforming opioids with superior efficacy and zero dependency risk ([PubMed: 11335783](https://pubmed.ncbi.nlm.nih.gov/11335783/)).
+    2. **Greater Occipital Nerve Blocks (GONB) for Migraine Patients Including Teens**: Targeted peripheral infiltration quieting afferent inputs to the trigeminocervical complex, proven effective across pediatric and adolescent refractory migraine ([Nerve Blocks in Pediatric and Adolescent Headache Disorders, PubMed: 29124490](https://pubmed.ncbi.nlm.nih.gov/29124490/)).
+  * Guidelines explicitly designate **IV opioids (hydromorphone)** as **Level A ("Must NOT Offer")**.
+  * Watch & Read: [Dr. Jennifer Robblee Presentation & SGEM Guidelines Review](https://thesgem.com/2026/01/sgem-xtra-hit-me-with-your-best-block-2025-ahs-ed-migraine-guidelines/) | [YouTube Video Overview](https://www.youtube.com/watch?v=JmYj-90V63w)
+
 ---
 
 ## 2. First-Principles Problem Decomposition

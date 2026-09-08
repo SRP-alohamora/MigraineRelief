@@ -152,6 +152,122 @@ export const NewsTab: React.FC = () => {
             </a>
           </div>
         </div>
+
+        {/* Card 3: What are Prodrome Markers? */}
+        <div className="medical-card p-6 border-t-4 border-t-[#008080] flex flex-col justify-between space-y-4">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Activity className="w-5 h-5 text-[#008080]" />
+              <h3 className="text-lg font-black text-[#003764]">
+                What are Prodrome Markers?
+              </h3>
+            </div>
+
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              <strong>Prodrome markers are early physical, behavioral, or biological signs that appear before a disease is fully diagnosed or reaches its severe phase.</strong> In migraine, hypothalamic and brainstem activation produces subtle prodromal signals—such as neck stiffness, frequent yawning, fatigue, mood shifts, and sensory hypersensitivity—hours before acute pain onset.
+            </p>
+
+            <div className="p-3 bg-teal-50 border border-teal-200 rounded text-xs text-teal-900 space-y-1.5">
+              <div>
+                <strong className="block font-bold mb-0.5">Acute Medications Reference:</strong>
+                Comprehensive guide on various medications today for treating migraines:
+              </div>
+              <a
+                href="https://cps.ca/en/documents/position/acute-migraine"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#005a9c] font-bold underline hover:text-[#002b4e] inline-flex items-center gap-1"
+              >
+                Acute Migraine Treatment &amp; Medications Guide (CPS) <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          </div>
+
+          <div className="pt-3 border-t border-slate-200">
+            <a
+              href="https://www.youtube.com/watch?v=9MIx21I1FRY&t=223s"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary text-xs w-full justify-center py-2 flex items-center gap-1.5"
+            >
+              <Play className="w-3.5 h-3.5 text-rose-600 fill-rose-600" />
+              <span>(The role of prodromal symptoms in predicting headache onset)</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        </div>
+
+        {/* Card 4: 2026 US Emergency Department Guidelines (Dr. Jennifer Robblee) */}
+        <div className="medical-card p-6 border-t-4 border-t-[#003764] flex flex-col justify-between space-y-4">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-[#003764]" />
+                <h3 className="text-lg font-black text-[#003764]">
+                  2026 US Emergency Department Guidelines
+                </h3>
+              </div>
+              <span className="badge-clinical text-[10px] bg-[#003764] text-white">Class A Update</span>
+            </div>
+
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              Dr. Jennifer Robblee shared that in the updated 2026 US Emergency Department guidelines, two treatments are elevated to <strong>'Must Offer' Class A recommendation</strong>:
+            </p>
+
+            <div className="space-y-2 text-xs">
+              <div className="p-2.5 bg-blue-50/80 border border-blue-200 rounded text-slate-800">
+                <div className="font-bold text-[#003764] flex items-center justify-between">
+                  <span>1. IV Prochlorperazine (prochlorazine)</span>
+                  <a
+                    href="https://pubmed.ncbi.nlm.nih.gov/11335783/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#005a9c] underline inline-flex items-center gap-1 font-mono text-[11px]"
+                  >
+                    PMID: 11335783 <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+                <p className="text-[11px] text-slate-600 mt-0.5">
+                  First-line dopamine antagonist providing superior efficacy over opioids with zero addiction liability.
+                </p>
+              </div>
+
+              <div className="p-2.5 bg-indigo-50/80 border border-indigo-200 rounded text-slate-800">
+                <div className="font-bold text-[#003764] flex items-center justify-between">
+                  <span>2. Occipital Nerve Block (including teens)</span>
+                  <a
+                    href="https://pubmed.ncbi.nlm.nih.gov/29124490/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#005a9c] underline inline-flex items-center gap-1 font-mono text-[11px]"
+                  >
+                    PMID: 29124490 <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+                <p className="text-[11px] text-slate-600 mt-0.5">
+                  Greater Occipital Nerve Blocks (GONB) for pediatric, adolescent, and adult migraineurs to quiet trigeminocervical transmission.
+                </p>
+              </div>
+            </div>
+
+            <p className="text-[11px] text-rose-700 font-semibold bg-rose-50 p-2 rounded border border-rose-200">
+              Note: Guidelines explicitly designate IV opioids as Class A "Must NOT Offer" to prevent chronic transformation and MOH.
+            </p>
+          </div>
+
+          <div className="pt-3 border-t border-slate-200 space-y-1.5">
+            <a
+              href="https://www.youtube.com/watch?v=JmYj-90V63w"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary text-xs w-full justify-center py-2 flex items-center gap-1.5"
+            >
+              <Play className="w-3.5 h-3.5 text-white fill-white" />
+              <span>Watch Dr. Jennifer Robblee: 2026 ED Guidelines Video</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        </div>
       </div>
 
       {/* Additional Clinical Briefs */}
@@ -210,6 +326,22 @@ export const ResearchPapersTab: React.FC = () => {
       pmid: '35133644',
       doi: '10.1111/head.14264',
       impact: 'Proves upper nasal delivery of DHE bypasses gastric paralysis, delivering fast therapeutic plasma concentrations within 20 minutes.',
+    },
+    {
+      title: 'Intravenous Prochlorperazine for the Treatment of Acute Headache in the Emergency Department',
+      authors: 'Callaham M, Khoury S. / Coppola M, Yealy DM, Leibold RA.',
+      journal: 'Ann Emerg Med & Am J Emerg Med (Level A "Must Offer" 2026 ED Guideline)',
+      pmid: '11335783',
+      doi: '10.1067/mem.2001.113357',
+      impact: 'Class A ("Must Offer") recommendation in the 2026 US Emergency Department guidelines presented by Dr. Jennifer Robblee. Demonstrates superior pain freedom over opioids without habituation risk.',
+    },
+    {
+      title: 'Nerve Blocks in Pediatric and Adolescent Headache Disorders',
+      authors: 'Seeger TA, Orr S, Bodell L, et al.',
+      journal: 'Current Pain and Headache Reports, 21(12):48',
+      pmid: '29124490',
+      doi: '10.1007/s11916-017-0657-3',
+      impact: 'Class A ("Must Offer") peripheral intervention in updated 2026 US Emergency Department guidelines. Confirms greater occipital nerve blocks (GONB) safely and rapidly arrest intractable migraine in pediatric, adolescent, and adult patients.',
     },
   ];
 
