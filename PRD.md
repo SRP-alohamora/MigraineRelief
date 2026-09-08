@@ -81,7 +81,7 @@ In the updated clinical consensus for acute migraine in emergency and urgent car
 
 ### 3.1 Persona 1: Alexa Rivera — The High School Sophomore (Adolescent Episodic Migraine)
 * **Demographics**: 15-year-old female, high school sophomore.
-* **The Living Reality**: Attacks strike unpredictably during high-stress exam weeks, in fluorescent-lit classrooms, after skipped cafeteria meals, or following pubertal hormonal shifts (luteal-phase estrogen drop). When an attack hits at school, Alexa experiences blinding photophobia, throbbing unilateral pain, and cognitive clouding ("brain fog"). School nurses frequently dismiss her pain as adolescent anxiety or academic avoidance.
+* **The Living Reality**: Attacks strike unpredictably during high-stress exam weeks, in fluorescent-lit classrooms, after skipped cafeteria meals, or following pubertal hormonal shifts (luteal-phase estrogen drop). When an attack hits at school, Alexa experiences blinding photophobia, throbbing unilateral pain, and cognitive clouding ("brain fog"). School nurses frequently dismiss her pain as adolescent anxiety, stress headache or academic avoidance.
 * **Pharmacological & Regulatory Constraints**:
   - **Pediatric Labeling Constraints**: Most adult migraine drugs lack FDA clearance under 18. Only a small subset (e.g., oral rizatriptan for ages 6+, zolmitriptan/almotriptan nasal sprays for ages 12+) carry pediatric indications.
   - **MOH Rebound Risk**: Frequent reliance on over-the-counter analgesics (Excedrin, ibuprofen) puts Alexa at catastrophic risk of chronic transformation.

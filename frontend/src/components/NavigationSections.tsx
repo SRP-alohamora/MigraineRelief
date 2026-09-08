@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BookOpen, ExternalLink, Database, Code, GitBranch, ShieldCheck, FileText, CheckCircle2, ArrowRight, Play, Video, Clock, Newspaper, Brain, Zap, Activity, Construction, Wrench, AlertTriangle, Cpu, FlaskConical, ArrowDown, Scale, Network, Check, Copy, AlertCircle } from 'lucide-react';
+import { BookOpen, ExternalLink, Database, Code, GitBranch, ShieldCheck, FileText, CheckCircle2, ArrowRight, Play, Video, Clock, Newspaper, Brain, Zap, Activity, Construction, Wrench, AlertTriangle, Cpu, FlaskConical, ArrowDown, Scale, Network, Check, Copy, AlertCircle, Users, Layers, ShieldAlert, ArrowRightCircle, Heart } from 'lucide-react';
 
 /* 1. News Tab */
 export const NewsTab: React.FC = () => {
@@ -625,6 +625,57 @@ export const ClassificationTab: React.FC = () => {
 /* 6. Under Construction Tab */
 export const UnderConstructionTab: React.FC = () => {
   const [copiedDiagram, setCopiedDiagram] = useState(false);
+  const [copiedMermaid, setCopiedMermaid] = useState(false);
+
+  const mermaidDiagram = `flowchart TD
+    subgraph Intake_Layer ["1. Ultra-Low Friction Intake (<3 Taps / Anonymous Upload)"]
+        UI_Attack["In-Attack Emergency Button (<3 Taps)"]
+        Anon_Upload["Anonymous Sandbox: Apple Health / Oura / CSV Drop"]
+        Sensors["Passive Wearable Background Sync (Sleep & HRV)"]
+    end
+
+    subgraph Deterministic_Guardrails ["2. Deterministic Safety & Normalization Gate"]
+        SNOOP["SNOOP4 Emergency Gate: Secondary Headache Red Flags"]
+        MOH_Gate["MOH Quota Ledger: Monthly Triptan/Analgesic Counter"]
+        Contra_Gate["Cardiovascular & Pediatric Filter"]
+    end
+
+    subgraph State_Store ["3. Longitudinal Patient State Ledger"]
+        Patient_History["Past Trajectories, Adverse Reactions, Failed Meds"]
+        MOH_Ledger["30-Day Rolling Medication Intake Count"]
+        N_of_1_Store["Personal Pharmacokinetic Decay Curves"]
+    end
+
+    subgraph Optimization_Brain ["4. Acute Rescue & Decision Brain"]
+        Timing_Engine["Pre-Allodynia Timing Window Clock"]
+        Route_Engine["Gastric Stasis Route-Switching Engine"]
+        Bayes_Ranker["Bayesian N-of-1 Molecule & Route Ranker"]
+    end
+
+    subgraph Action_Output ["5. Action Delivery & Explanation"]
+        Rescue_Card["Personalized Acute Rescue Card (Instant Delivery)"]
+        Epistemic_Badge["Epistemic Tier Tagging (Level 1 / 2 / 3)"]
+        Explanation["Plain-English Rationale & Timing Warning"]
+    end
+
+    subgraph Outcome_Loop ["6. Closed-Loop Feedback & Compounding Graph"]
+        Push_2h["Automated 2h Push Notification (Pain Free? Regurgitation?)"]
+        Push_24h["Automated 24h Push Notification (Recurrence? Repeat Rescue?)"]
+        Graph_Store["Proprietary Intervention-Response Graph"]
+    end
+
+    UI_Attack --> SNOOP
+    Anon_Upload --> SNOOP
+    Sensors --> Timing_Engine
+
+    SNOOP -->|Pass| MOH_Gate
+    SNOOP -->|Red Flag Detected| ER_Divert["URGENT: Divert to Emergency Services / 911"]`;
+
+  const handleCopyMermaid = () => {
+    navigator.clipboard.writeText(mermaidDiagram);
+    setCopiedMermaid(true);
+    setTimeout(() => setCopiedMermaid(false), 2000);
+  };
 
   const asciiDiagram = `MIGRAINE DATA LAB
         |
@@ -783,6 +834,383 @@ N-of-1 personalization`;
           Upcoming clinical algorithms, real-world data pipelines, and computational pharmacology engines currently in engineering sprint and clinical validation for Migraine Relief.
         </p>
       </div>
+
+      {/* =========================================================================
+          PRD SECTION 3: TARGET CLINICAL PERSONAS
+          ========================================================================= */}
+      <section className="space-y-5">
+        <div className="border-b border-[#003764] pb-2 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 className="text-xl font-extrabold text-[#003764] uppercase tracking-wide flex items-center gap-2">
+              <Users className="w-5 h-5 text-[#005a9c]" />
+              Target Clinical Personas (PRD Section 3)
+            </h3>
+            <p className="text-xs text-slate-500 font-medium">
+              Real-world clinical phenotypes driving deterministic safety gates, route switching, and acute rescue timing
+            </p>
+          </div>
+          <span className="badge-clinical bg-[#003764] text-white">Clinical Requirements</span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Persona 1: Alexa Rivera */}
+          <div className="medical-card p-6 border-t-4 border-t-purple-600 flex flex-col justify-between space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded border border-purple-200">
+                    Persona 1 • Adolescent
+                  </span>
+                  <h4 className="text-lg font-black text-[#003764] mt-1">
+                    Alexa Rivera (Age 15)
+                  </h4>
+                  <div className="text-xs font-semibold text-slate-500">
+                    High School Sophomore • Episodic Probable Migraine without Aura
+                  </div>
+                </div>
+              </div>
+
+              {/* The Living Reality with exact quote */}
+              <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-700 space-y-2">
+                <strong className="text-slate-900 block font-bold text-xs uppercase tracking-wide text-purple-900">
+                  The Living Reality:
+                </strong>
+                <p className="leading-relaxed">
+                  Attacks strike unpredictably during high-stress exam weeks, in fluorescent-lit classrooms, after skipped cafeteria meals, or following pubertal hormonal shifts (luteal-phase estrogen drop). When an attack hits at school, Alexa experiences blinding photophobia, throbbing unilateral pain, and cognitive clouding ("brain fog"). <strong>School nurses frequently dismiss her pain as adolescent anxiety, stress headache or academic avoidance.</strong>
+                </p>
+              </div>
+
+              {/* Pharmacological & Regulatory Constraints */}
+              <div className="space-y-1.5 text-xs text-slate-600">
+                <div className="font-bold text-[#003764]">Pharmacological &amp; Regulatory Constraints:</div>
+                <ul className="space-y-1 pl-1">
+                  <li className="flex items-start gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 flex-shrink-0 mt-0.5" />
+                    <span><strong>Pediatric Labeling:</strong> Most adult drugs lack FDA clearance under 18 (restricted to oral rizatriptan 6+, zolmitriptan NS 12+).</span>
+                  </li>
+                  <li className="flex items-start gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 flex-shrink-0 mt-0.5" />
+                    <span><strong>MOH Rebound Risk:</strong> Frequent reliance on over-the-counter analgesics (Excedrin, ibuprofen) risks catastrophic transformation into daily chronic migraine.</span>
+                  </li>
+                  <li className="flex items-start gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 flex-shrink-0 mt-0.5" />
+                    <span><strong>Sedation Avoidance:</strong> Sedating antiemetics cause severe daytime somnolence, disabling school participation.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-slate-200">
+              <div className="p-3 bg-purple-50 rounded border border-purple-200 text-xs text-purple-900">
+                <strong>System Value to Alexa:</strong> Strictly enforces pediatric indications (no DHE, no unvalidated adult gepants), flags monthly OTC analgesic frequency to intercept MOH, recommends non-sedating intranasal rescue, and considers occipital nerve blocks (GONB, PMID: 29124490) for refractory attacks.
+              </div>
+            </div>
+          </div>
+
+          {/* Persona 2: Claire Sterling */}
+          <div className="medical-card p-6 border-t-4 border-t-[#005a9c] flex flex-col justify-between space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#005a9c] bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200">
+                    Persona 2 • Adult Refractory
+                  </span>
+                  <h4 className="text-lg font-black text-[#003764] mt-1">
+                    Claire Sterling (Age 45)
+                  </h4>
+                  <div className="text-xs font-semibold text-slate-500">
+                    Senior Director &amp; Mother • Chronic Refractory Migraine with Gastroparesis
+                  </div>
+                </div>
+              </div>
+
+              {/* The Living Reality */}
+              <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-700 space-y-2">
+                <strong className="text-slate-900 block font-bold text-xs uppercase tracking-wide text-[#003764]">
+                  The Living Reality:
+                </strong>
+                <p className="leading-relaxed">
+                  Endures 18–22 headache days per month with attacks lasting 24 to 72 hours. Acute autonomic gastroparesis shuts down gastric emptying within 45 minutes of onset. Swallowed oral pills remain trapped in stomach acid, resulting in violent emesis, total absorption failure, and repeated emergency department visits.
+                </p>
+              </div>
+
+              {/* Pharmacological Constraints */}
+              <div className="space-y-1.5 text-xs text-slate-600">
+                <div className="font-bold text-[#003764]">Pharmacological &amp; Clinical Constraints:</div>
+                <ul className="space-y-1 pl-1">
+                  <li className="flex items-start gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#005a9c] flex-shrink-0 mt-0.5" />
+                    <span><strong>Oral Route Failure:</strong> Pyloric closure arrests oral pill absorption velocity; 78% fail within 60 minutes.</span>
+                  </li>
+                  <li className="flex items-start gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#005a9c] flex-shrink-0 mt-0.5" />
+                    <span><strong>Triptan Tolerance:</strong> Chronic non-response requiring non-vasoconstrictive gepants or subcutaneous delivery.</span>
+                  </li>
+                  <li className="flex items-start gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#005a9c] flex-shrink-0 mt-0.5" />
+                    <span><strong>Status Migrainosus Risk:</strong> Requires emergency parenteral options (IV prochlorperazine, PMID: 11335783).</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-slate-200">
+              <div className="p-3 bg-blue-50 rounded border border-blue-200 text-xs text-[#003764]">
+                <strong>System Value to Claire:</strong> Autonomously detects acute gastric stasis and instantly diverts from oral pills to non-oral delivery (subcutaneous sumatriptan, nasal POD DHE, or nasal gepants), manages rolling 30-day MOH limits, and initiates preventative bridge guidance.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          PRD SECTION 4: ACUTE RESCUE SYSTEM ARCHITECTURE (END-TO-END FLOW)
+          ========================================================================= */}
+      <section className="space-y-6">
+        <div className="border-b border-[#003764] pb-2 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 className="text-xl font-extrabold text-[#003764] uppercase tracking-wide flex items-center gap-2">
+              <Layers className="w-5 h-5 text-[#003764]" />
+              Acute Rescue System Architecture (PRD Section 4)
+            </h3>
+            <p className="text-xs text-slate-500 font-medium">
+              End-to-end clinical decision flow from ultra-low friction intake to closed-loop compounding graph
+            </p>
+          </div>
+          <span className="badge-clinical bg-[#005a9c] text-white">Canonical Architecture</span>
+        </div>
+
+        {/* 6-Stage Visual Architecture Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Layer 1: Intake Layer */}
+          <div className="medical-card p-5 border-t-4 border-t-sky-500 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800">
+                  LAYER 1
+                </span>
+                <span className="text-xs text-slate-400 font-mono">&lt;3 Taps Intake</span>
+              </div>
+              <h4 className="text-sm font-extrabold text-[#003764]">
+                1. Ultra-Low Friction Intake
+              </h4>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Zero cognitive burden during acute pain. Collects minimal essential features without demanding 15-minute surveys.
+              </p>
+              <ul className="space-y-1.5 text-xs text-slate-700 pt-1">
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>In-Attack Emergency Button:</strong> &lt;3 taps to trigger rescue evaluation.
+                </li>
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>Anonymous Sandbox:</strong> Apple Health / Oura / CSV Drop without PHI.
+                </li>
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>Passive Wearable Sync:</strong> Background sleep &amp; nocturnal HRV telemetry.
+                </li>
+              </ul>
+            </div>
+            <div className="text-[11px] text-sky-700 font-bold mt-3 pt-2 border-t border-slate-100 flex items-center gap-1">
+              <span>Outputs to Safety Gate</span> <ArrowRight className="w-3 h-3" />
+            </div>
+          </div>
+
+          {/* Layer 2: Deterministic Guardrails */}
+          <div className="medical-card p-5 border-t-4 border-t-rose-500 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800">
+                  LAYER 2
+                </span>
+                <span className="text-xs text-rose-600 font-semibold flex items-center gap-1">
+                  <ShieldAlert className="w-3 h-3" /> Red Flag Gate
+                </span>
+              </div>
+              <h4 className="text-sm font-extrabold text-[#003764]">
+                2. Deterministic Safety Gate
+              </h4>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Hard deterministic rules that run before any algorithmic reasoning. Zero tolerance for false-negative secondary red flags.
+              </p>
+              <ul className="space-y-1.5 text-xs text-slate-700 pt-1">
+                <li className="p-2 bg-rose-50 rounded border border-rose-200 text-rose-900">
+                  <strong>SNOOP4 Emergency Gate:</strong> Thunderclap &lt;1 min, focal deficits, fever, new onset &gt;50 &rarr; <em>URGENT: Divert to 911</em>.
+                </li>
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>MOH Quota Ledger:</strong> Rolling 30-day triptan (&le;10d) &amp; NSAID (&le;15d) counter.
+                </li>
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>Cardiovascular &amp; Pediatric Filter:</strong> Blocks vasoconstrictors in CAD/stroke and under-18s.
+                </li>
+              </ul>
+            </div>
+            <div className="text-[11px] text-rose-700 font-bold mt-3 pt-2 border-t border-slate-100 flex items-center gap-1">
+              <span>Pass &rarr; State Ledger | Red Flag &rarr; 911</span>
+            </div>
+          </div>
+
+          {/* Layer 3: Longitudinal State Ledger */}
+          <div className="medical-card p-5 border-t-4 border-t-indigo-500 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800">
+                  LAYER 3
+                </span>
+                <span className="text-xs text-slate-400 font-mono">Client-Side Store</span>
+              </div>
+              <h4 className="text-sm font-extrabold text-[#003764]">
+                3. Longitudinal State Ledger
+              </h4>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Persistent patient context encrypted client-side. Decoupled from cloud identity and personal identifiers.
+              </p>
+              <ul className="space-y-1.5 text-xs text-slate-700 pt-1">
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>Patient History:</strong> Past trajectories, adverse reactions, and failed molecules.
+                </li>
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>30-Day Rolling Ledger:</strong> Real-time quota exhaustion percentage.
+                </li>
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>N-of-1 Store:</strong> Calibrated pharmacokinetic decay curves and threshold shifts.
+                </li>
+              </ul>
+            </div>
+            <div className="text-[11px] text-indigo-700 font-bold mt-3 pt-2 border-t border-slate-100 flex items-center gap-1">
+              <span>Feeds Decision Brain</span> <ArrowRight className="w-3 h-3" />
+            </div>
+          </div>
+
+          {/* Layer 4: Acute Rescue & Decision Brain */}
+          <div className="medical-card p-5 border-t-4 border-t-amber-500 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">
+                  LAYER 4
+                </span>
+                <span className="text-xs text-slate-400 font-mono">&lt;50ms Inference</span>
+              </div>
+              <h4 className="text-sm font-extrabold text-[#003764]">
+                4. Acute Rescue Decision Brain
+              </h4>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Matches biological attack velocity, gastric motility state, and allodynia onset to optimal formulation.
+              </p>
+              <ul className="space-y-1.5 text-xs text-slate-700 pt-1">
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>Pre-Allodynia Timing Clock:</strong> Tracks elapsed window before cutaneous allodynia locks in (&lt;60m).
+                </li>
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>Gastric Route-Switching Engine:</strong> Switches from oral pills to nasal/SC on nausea or emesis.
+                </li>
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>Bayesian Molecule Ranker:</strong> Multi-armed bandit ranking individual response probabilities.
+                </li>
+              </ul>
+            </div>
+            <div className="text-[11px] text-amber-700 font-bold mt-3 pt-2 border-t border-slate-100 flex items-center gap-1">
+              <span>Generates Rescue Card</span> <ArrowRight className="w-3 h-3" />
+            </div>
+          </div>
+
+          {/* Layer 5: Action Delivery & Explanation */}
+          <div className="medical-card p-5 border-t-4 border-t-emerald-500 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
+                  LAYER 5
+                </span>
+                <span className="text-xs text-slate-400 font-mono">Direct Action</span>
+              </div>
+              <h4 className="text-sm font-extrabold text-[#003764]">
+                5. Action Delivery &amp; Explanation
+              </h4>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Instant delivery of high-confidence rescue instructions with plain-English rationale and scientific epistemic tagging.
+              </p>
+              <ul className="space-y-1.5 text-xs text-slate-700 pt-1">
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>Personalized Rescue Card:</strong> Exact molecule, dose, formulation, and timing guidance.
+                </li>
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>Epistemic Tier Tagging:</strong> Clear scientific tags (Level 1 Confirmed / Level 2 Trial Prior / Level 3 Posterior).
+                </li>
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>Timing Warnings:</strong> Pre-allodynic urgency callouts and hydration protocol.
+                </li>
+              </ul>
+            </div>
+            <div className="text-[11px] text-emerald-700 font-bold mt-3 pt-2 border-t border-slate-100 flex items-center gap-1">
+              <span>Initiates Feedback Loop</span> <ArrowRight className="w-3 h-3" />
+            </div>
+          </div>
+
+          {/* Layer 6: Closed-Loop Feedback */}
+          <div className="medical-card p-5 border-t-4 border-t-teal-600 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-teal-100 text-teal-800">
+                  LAYER 6
+                </span>
+                <span className="text-xs text-slate-400 font-mono">Compounding Moat</span>
+              </div>
+              <h4 className="text-sm font-extrabold text-[#003764]">
+                6. Closed-Loop Feedback Graph
+              </h4>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Validates clinical endpoints at 2h and 24h, compounding into the world's first longitudinal intervention-response dataset.
+              </p>
+              <ul className="space-y-1.5 text-xs text-slate-700 pt-1">
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>2h Push Check-in:</strong> 1-tap capture: 2-hour pain freedom achieved? Emesis/regurgitation?
+                </li>
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>24h Push Check-in:</strong> Sustained pain freedom vs recurrence, repeat rescue intake.
+                </li>
+                <li className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <strong>Intervention-Response Graph:</strong> Updates Bayesian posterior weights for subsequent attacks.
+                </li>
+              </ul>
+            </div>
+            <div className="text-[11px] text-teal-700 font-bold mt-3 pt-2 border-t border-slate-100 flex items-center gap-1">
+              <span>Refines Future Personalization</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Mermaid Architecture Code Box with 1-Click Copy */}
+        <div className="medical-card p-0 overflow-hidden border border-slate-700 bg-[#0c2340] text-slate-100 shadow-lg">
+          <div className="bg-[#003764] px-5 py-3 border-b border-slate-700 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-cyan-400"></div>
+              <span className="text-xs font-mono font-bold text-slate-200">
+                prd_section_4_acute_rescue_architecture.mmd (Mermaid Flowchart)
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleCopyMermaid}
+              className="text-xs font-semibold px-2.5 py-1 bg-white/10 hover:bg-white/20 rounded text-slate-200 flex items-center gap-1.5 transition-colors"
+            >
+              {copiedMermaid ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-emerald-300">Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copy Mermaid Code</span>
+                </>
+              )}
+            </button>
+          </div>
+          <div className="p-6 overflow-x-auto">
+            <pre className="font-mono text-xs text-cyan-300 leading-relaxed whitespace-pre font-medium">
+              {mermaidDiagram}
+            </pre>
+          </div>
+        </div>
+      </section>
 
       {/* =========================================================================
           MIGRAINE DATA LAB: Machine Learning Architecture & Fair Test Protocol

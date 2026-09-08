@@ -58,6 +58,53 @@ export const CustomizeProtocolModal: React.FC<CustomizeProtocolModalProps> = ({
           </button>
         </div>
 
+        {/* Quick Persona Presets (PRD Section 3) */}
+        <div className="mb-6 p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+          <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 block">
+            Load Clinical Persona Preset (PRD Section 3):
+          </span>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() =>
+                setFormData({
+                  patientAge: 15,
+                  routePreference: 'nasal',
+                  hasCAD: false,
+                  hasHemiplegicAura: false,
+                  isPregnant: false,
+                  avoidTriptanSensations: true,
+                  avoidSedation: true,
+                  triptanDays: 3,
+                  nsaidDays: 9,
+                })
+              }
+              className="text-xs font-bold px-3 py-1.5 bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 rounded-lg transition-colors flex items-center gap-1"
+            >
+              <span>Alexa Rivera (Age 15, Adolescent)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                setFormData({
+                  patientAge: 45,
+                  routePreference: 'sc',
+                  hasCAD: false,
+                  hasHemiplegicAura: false,
+                  isPregnant: false,
+                  avoidTriptanSensations: false,
+                  avoidSedation: false,
+                  triptanDays: 8,
+                  nsaidDays: 4,
+                })
+              }
+              className="text-xs font-bold px-3 py-1.5 bg-blue-50 text-[#003764] hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors flex items-center gap-1"
+            >
+              <span>Claire Sterling (Age 45, Refractory Gastroparesis)</span>
+            </button>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Patient Age & Adolescent Clearance */}
           <div>
