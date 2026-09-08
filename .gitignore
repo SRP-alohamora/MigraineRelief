@@ -1,0 +1,29 @@
+# Environment and OS
+.DS_Store
+*.local
+
+# Node / Python Dependencies / Scratch
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+.cache/
+*.log
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+catboost_info/
+
+# Patient upload sandbox
+data/patient_records/*.json
+!data/patient_records/.gitkeep
+
+# Generated test patient memories
+app/knowledge/viking_filesystem/memories/dr_sarah_connor/
+app/knowledge/viking_filesystem/memories/shivanipradhan/
+
+

@@ -1,0 +1,6 @@
+{
+  "session_id": "anonymousPatient_0",
+  "created_at": "2026-09-01T00:00:00Z",
+  "encryption": "AES-GCM-256",
+  "status": "ephemeral_local_only"
+}

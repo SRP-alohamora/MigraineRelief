@@ -1,0 +1,459 @@
+@tailwind base;
+
+@layer base {
+  :root {
+    /* Brand — Clinical Editorial Navy/Teal */
+    --color-brand-deep: #003764;
+    --color-brand-primary: #005a9c;
+    --color-brand-accent: #0077b6;
+    --color-brand-cyan: #0284c7;
+    --color-brand-teal: #0d9488;
+    --color-brand-hover: #002b4e;
+    --color-brand-pale: #f0f7fc;
+    --color-brand-pale-border: #c2dbed;
+
+    /* Surfaces */
+    --color-bg-base: #ffffff;
+    --color-bg-subtle: #f8fafc;
+    --color-bg-muted: #f1f5f9;
+
+    /* Borders */
+    --color-border: #dbe2e8;
+    --color-border-subtle: #e7edf2;
+    --color-border-strong: #003764;
+
+    /* Typography */
+    --color-text-navy: #0c2340;
+    --color-text-body: #1e293b;
+    --color-text-secondary: #475569;
+    --color-text-muted: #64748b;
+    --color-text-inverse: #ffffff;
+
+    /* Status */
+    --color-status-success: #0a8754;
+    --color-status-success-bg: #ecfdf5;
+    --color-status-success-border: #a7f3d0;
+    --color-status-warning: #b45309;
+    --color-status-warning-bg: #fffbeb;
+    --color-status-warning-border: #fde68a;
+    --color-status-alert: #b91c1c;
+    --color-status-alert-bg: #fef2f2;
+    --color-status-alert-border: #fecaca;
+
+    /* Emergency / Rescue — high-contrast dark accent reserved for the in-attack flow */
+    --color-emergency-bg: #170a10;
+    --color-emergency-surface: #23111a;
+    --color-emergency-border: rgba(244, 63, 94, 0.35);
+
+    /* Typography families */
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    /* Motion */
+    --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Elevation */
+    --shadow-sm: 0 1px 2px rgba(15, 32, 55, 0.05);
+    --shadow-md: 0 4px 12px rgba(15, 32, 55, 0.07);
+    --shadow-lg: 0 10px 24px -4px rgba(15, 32, 55, 0.1);
+    --shadow-modal: 0 24px 48px -12px rgba(10, 22, 40, 0.35);
+  }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg-base);
+    color: var(--color-text-body);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'ss01' 1, 'cv01' 1;
+  }
+
+  ::selection {
+    background-color: #bfe0f5;
+    color: var(--color-brand-deep);
+  }
+
+  :focus-visible {
+    outline: 2.5px solid var(--color-brand-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Refined scrollbar — subtle, non-intrusive */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+    background-clip: padding-box;
+  }
+}
+
+@tailwind components;
+
+@layer components {
+  /* ============================================================
+     Layout
+     ============================================================ */
+  .app-container {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  @media (min-width: 768px) {
+    .app-container {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .app-container {
+      max-width: 1320px;
+    }
+  }
+
+  /* ============================================================
+     Cards — three related editorial surfaces used across the app
+     ============================================================ */
+  .medical-card,
+  .webmd-card,
+  .card-panel {
+    background: var(--color-bg-base);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.25s var(--ease-out-soft), border-color 0.25s var(--ease-out-soft), transform 0.25s var(--ease-out-soft);
+  }
+
+  .medical-card {
+    border-radius: 14px;
+  }
+  .medical-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: #b8c6d4;
+  }
+
+  .webmd-card {
+    border-radius: 12px;
+  }
+  .webmd-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: #b8c6d4;
+    transform: translateY(-1px);
+  }
+
+  .card-panel {
+    border-radius: 22px;
+    box-shadow: var(--shadow-md);
+  }
+  .card-panel:hover {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .medical-card-featured {
+    border-top: 4px solid var(--color-brand-primary);
+  }
+
+  .medical-card-accent {
+    border-top: 4px solid var(--color-brand-accent);
+  }
+
+  /* ============================================================
+     Buttons
+     ============================================================ */
+  .btn-primary,
+  .btn-webmd {
+    background-image: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-deep));
+    background-color: var(--color-brand-primary);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 12px 26px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 1px 2px rgba(0, 40, 75, 0.15), 0 6px 16px -6px rgba(0, 90, 156, 0.45);
+    transition: transform 0.18s var(--ease-out-soft), box-shadow 0.18s var(--ease-out-soft), filter 0.18s ease;
+    text-decoration: none;
+  }
+
+  .btn-primary:hover,
+  .btn-webmd:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 2px 4px rgba(0, 40, 75, 0.18), 0 10px 22px -6px rgba(0, 90, 156, 0.55);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:active,
+  .btn-webmd:active {
+    transform: translateY(0);
+    filter: brightness(0.98);
+  }
+
+  .btn-primary:disabled,
+  .btn-webmd:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-primary:focus-visible,
+  .btn-webmd:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+  }
+
+  .btn-secondary,
+  .btn-webmd-outline {
+    background-color: transparent;
+    color: var(--color-brand-primary);
+    border: 1.5px solid var(--color-brand-primary);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 10px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.18s var(--ease-out-soft);
+    text-decoration: none;
+  }
+
+  .btn-secondary:hover,
+  .btn-webmd-outline:hover {
+    background-color: var(--color-brand-pale);
+    color: var(--color-brand-deep);
+    border-color: var(--color-brand-deep);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary:active,
+  .btn-webmd-outline:active {
+    transform: translateY(0);
+  }
+
+  /* Giant emergency rescue trigger — the one place the product goes
+     full high-contrast dark, per the in-attack UX spec. Oversized
+     touch target (>=64px tall) for trembling hands / photophobia. */
+  .btn-emergency {
+    width: 100%;
+    min-height: 64px;
+    background-image: linear-gradient(135deg, #e11d48, #9f1239);
+    color: #fff5f5;
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 1px 2px rgba(80, 5, 20, 0.35), 0 12px 28px -8px rgba(225, 29, 72, 0.55);
+    transition: transform 0.18s var(--ease-out-soft), box-shadow 0.18s var(--ease-out-soft), filter 0.18s ease;
+  }
+
+  .btn-emergency:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 2px 4px rgba(80, 5, 20, 0.4), 0 16px 32px -8px rgba(225, 29, 72, 0.65);
+    transform: translateY(-1px);
+  }
+
+  .btn-emergency:disabled {
+    opacity: 0.65;
+    cursor: wait;
+    transform: none;
+  }
+
+  /* ============================================================
+     Badges
+     ============================================================ */
+  .badge-clinical {
+    background-color: var(--color-brand-pale);
+    color: var(--color-brand-deep);
+    border: 1px solid var(--color-brand-pale-border);
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .badge-tier-1,
+  .badge-tier-2,
+  .badge-tier-3 {
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 3px 9px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+
+  /* Level 1: Confirmed Clinical Protocol — deterministic ground truth */
+  .badge-tier-1 {
+    background-color: var(--color-status-success-bg);
+    color: var(--color-status-success);
+    border-color: var(--color-status-success-border);
+  }
+
+  /* Level 2: Probabilistic Clinical Trial Prior */
+  .badge-tier-2 {
+    background-color: #eff8ff;
+    color: #0369a1;
+    border-color: #bae6fd;
+  }
+
+  /* Level 3: Exploratory Population Prior */
+  .badge-tier-3 {
+    background-color: var(--color-status-warning-bg);
+    color: var(--color-status-warning);
+    border-color: var(--color-status-warning-border);
+  }
+
+  /* ============================================================
+     Motion
+     ============================================================ */
+  @keyframes clinicalFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(3px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-clinical-fade {
+    animation: clinicalFadeIn 0.2s ease-out forwards;
+  }
+
+  /* ============================================================
+     Homepage hero — the one place we lean into depth/gradient
+     ============================================================ */
+  .hero-band {
+    position: relative;
+    overflow: hidden;
+    border-radius: 26px;
+    background:
+      radial-gradient(120% 140% at 12% -10%, rgba(2, 132, 199, 0.16), transparent 55%),
+      radial-gradient(90% 120% at 100% 0%, rgba(13, 148, 136, 0.14), transparent 60%),
+      linear-gradient(180deg, var(--color-brand-pale) 0%, #ffffff 100%);
+    border: 1px solid var(--color-brand-pale-border);
+  }
+
+  .hero-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(0, 55, 100, 0.12) 1px, transparent 1px);
+    background-size: 22px 22px;
+    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.5), transparent 70%);
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.5), transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid var(--color-brand-pale-border);
+    box-shadow: var(--shadow-xs, var(--shadow-sm));
+    color: var(--color-brand-deep);
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .text-gradient-brand {
+    background-image: linear-gradient(120deg, var(--color-brand-primary), var(--color-brand-teal) 60%, var(--color-brand-cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Icon chip — gradient-filled circular icon container used across
+     hero stats and section headers for a touch of premium depth. */
+  .icon-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 14px;
+    background-image: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-deep));
+    color: #ffffff;
+    box-shadow: 0 6px 16px -6px rgba(0, 90, 156, 0.5);
+  }
+
+  .icon-chip-teal {
+    background-image: linear-gradient(135deg, #14b8a6, var(--color-brand-teal));
+    box-shadow: 0 6px 16px -6px rgba(13, 148, 136, 0.5);
+  }
+
+  .stat-chip {
+    background: #ffffff;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s var(--ease-out-soft), box-shadow 0.2s var(--ease-out-soft);
+  }
+
+  .stat-chip:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+@tailwind utilities;
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}

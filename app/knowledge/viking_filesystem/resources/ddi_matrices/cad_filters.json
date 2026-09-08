@@ -1,0 +1,25 @@
+{
+  "condition": "coronary_artery_disease",
+  "contraindicated_classes": [
+    "triptans",
+    "ergotamines"
+  ],
+  "contraindicated_agents": [
+    "Sumatriptan",
+    "Zolmitriptan",
+    "Rizatriptan",
+    "Naratriptan",
+    "Almotriptan",
+    "Frovatriptan",
+    "Eletriptan",
+    "Dihydroergotamine",
+    "Ergotamine"
+  ],
+  "permitted_alternatives": [
+    "Rimegepant",
+    "Ubrogepant",
+    "Zavegepant",
+    "Lasmiditan",
+    "Neuromodulation"
+  ]
+}

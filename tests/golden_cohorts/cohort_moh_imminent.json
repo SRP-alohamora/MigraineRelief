@@ -1,0 +1,24 @@
+{
+  "persona_id": "moh_patient_38f",
+  "name": "Sarah Miller",
+  "age": 38,
+  "sex": "Female",
+  "clinical_phenotype": "Frequent episodic converting to chronic migraine with impending medication overuse headache",
+  "input_state": {
+    "patient_age": 38,
+    "minutes_since_onset": 40,
+    "current_pain_scale": 6,
+    "nausea_present": false,
+    "vomiting_present": false,
+    "cutaneous_allodynia_flag": false,
+    "cardiovascular_disease": false,
+    "hemiplegic_migraine_history": false,
+    "rolling_30d_triptan_days": 11,
+    "rolling_30d_nsaid_days": 6
+  },
+  "expected_assertions": {
+    "moh_limit_exceeded": true,
+    "triage_status": "SAFE_FOR_ANALYSIS",
+    "assertions_passed": true
+  }
+}

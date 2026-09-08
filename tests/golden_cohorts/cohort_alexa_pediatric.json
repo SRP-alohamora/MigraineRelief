@@ -1,0 +1,27 @@
+{
+  "persona_id": "alexa_rivera_15f",
+  "name": "Alexa Rivera",
+  "age": 15,
+  "sex": "Female",
+  "clinical_phenotype": "Episodic migraine without aura, high academic stress, menstrual vulnerability",
+  "input_state": {
+    "patient_age": 15,
+    "minutes_since_onset": 25,
+    "current_pain_scale": 7,
+    "nausea_present": false,
+    "vomiting_present": false,
+    "cutaneous_allodynia_flag": false,
+    "cardiovascular_disease": false,
+    "hemiplegic_migraine_history": false,
+    "rolling_30d_triptan_days": 2,
+    "rolling_30d_nsaid_days": 4
+  },
+  "expected_assertions": {
+    "is_pediatric": true,
+    "triage_status": "SAFE_FOR_ANALYSIS",
+    "recommended_route": "ORAL_TABLET",
+    "recommended_molecule_in": ["Rizatriptan_10mg", "Ibuprofen_800mg"],
+    "prohibited_molecules": ["DHE_POD_Intranasal", "Sumatriptan_6mg_SC", "Ergotamine"],
+    "moh_limit_exceeded": false
+  }
+}

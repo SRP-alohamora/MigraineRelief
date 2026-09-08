@@ -1,0 +1,24 @@
+{
+  "persona_id": "thunderclap_patient_29f",
+  "name": "Jessica Taylor",
+  "age": 29,
+  "sex": "Female",
+  "clinical_phenotype": "Sudden onset thunderclap headache reaching 10/10 severity in under 3 minutes",
+  "input_state": {
+    "patient_age": 29,
+    "minutes_since_onset": 2,
+    "current_pain_scale": 10,
+    "nausea_present": false,
+    "vomiting_present": false,
+    "cutaneous_allodynia_flag": false,
+    "cardiovascular_disease": false,
+    "hemiplegic_migraine_history": false,
+    "rolling_30d_triptan_days": 1,
+    "rolling_30d_nsaid_days": 1
+  },
+  "expected_assertions": {
+    "triage_status": "EMERGENCY_SNOOP4_DETECTED",
+    "emergency_divert_message_contains": "EMERGENCY",
+    "recommended_molecule_is_none": true
+  }
+}

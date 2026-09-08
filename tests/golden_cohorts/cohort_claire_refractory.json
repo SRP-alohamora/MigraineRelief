@@ -1,0 +1,27 @@
+{
+  "persona_id": "claire_sterling_45f",
+  "name": "Claire Sterling",
+  "age": 45,
+  "sex": "Female",
+  "clinical_phenotype": "Chronic refractory migraine with severe gastric stasis and delayed presentation",
+  "input_state": {
+    "patient_age": 45,
+    "minutes_since_onset": 75,
+    "current_pain_scale": 8,
+    "nausea_present": true,
+    "vomiting_present": false,
+    "cutaneous_allodynia_flag": false,
+    "cardiovascular_disease": false,
+    "hemiplegic_migraine_history": false,
+    "rolling_30d_triptan_days": 6,
+    "rolling_30d_nsaid_days": 8
+  },
+  "expected_assertions": {
+    "is_pediatric": false,
+    "triage_status": "SAFE_FOR_ANALYSIS",
+    "recommended_route": "INTRANASAL_SPRAY",
+    "route_switch_reasoning_contains": "gastric stasis",
+    "adjuvant_antiemetic_contains": "Ondansetron",
+    "viking_pruned_paths_contains": "viking://knowledge/migraine/delivery_routes/oral_transmucosal/"
+  }
+}

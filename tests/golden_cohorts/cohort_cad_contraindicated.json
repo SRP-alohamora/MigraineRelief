@@ -1,0 +1,25 @@
+{
+  "persona_id": "cad_patient_62f",
+  "name": "Evelyn Ross",
+  "age": 62,
+  "sex": "Female",
+  "clinical_phenotype": "Post-menopausal migraine with history of coronary artery disease and stent placement",
+  "input_state": {
+    "patient_age": 62,
+    "minutes_since_onset": 35,
+    "current_pain_scale": 7,
+    "nausea_present": false,
+    "vomiting_present": false,
+    "cutaneous_allodynia_flag": false,
+    "cardiovascular_disease": true,
+    "hemiplegic_migraine_history": false,
+    "rolling_30d_triptan_days": 0,
+    "rolling_30d_nsaid_days": 2
+  },
+  "expected_assertions": {
+    "cardiovascular_disease": true,
+    "recommended_molecule": "Rimegepant_75mg",
+    "prohibited_classes": ["triptans", "ergotamines"],
+    "assertions_passed": true
+  }
+}

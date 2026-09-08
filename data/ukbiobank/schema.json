@@ -1,0 +1,32 @@
+{
+  "field_id": "20002",
+  "field_name": "Non-cancer illness code, self-reported",
+  "cohort_name": "UK Biobank",
+  "instance_meaning": {
+    "1265": "migraine",
+    "1263": "headaches (not migraine)"
+  },
+  "participant_counts": {
+    "total_cohort_approx": 502000,
+    "migraine_cases_code_1265": 19819,
+    "headaches_non_migraine_code_1263": 9240,
+    "controls": 472941
+  },
+  "evidence_quality": {
+    "diagnostic_certainty": "Self-Reported at Verbal Interview (Touchscreen / Nurse Validation)",
+    "is_specialist_confirmed": false,
+    "epistemic_tier": "Level 3: Exploratory Population Prior",
+    "notes": "Field 20002 is not a standalone curated trial dataset. It reflects self-reported prevalence across a middle-to-older aged UK cohort (40-69 years)."
+  },
+  "associated_feature_fields": {
+    "sleep_duration": "Field 1160",
+    "insomnia_symptoms": "Field 1200",
+    "chronotype": "Field 1180",
+    "overall_health_rating": "Field 2178",
+    "neuroticism_score": "Field 20127",
+    "systolic_blood_pressure": "Field 4080",
+    "bmi": "Field 21001",
+    "sex": "Field 31",
+    "age_at_recruitment": "Field 21022"
+  }
+}

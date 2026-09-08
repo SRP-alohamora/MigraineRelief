@@ -1,0 +1,37 @@
+{
+  "population": "pediatric_adolescent_12_to_17",
+  "approved_agents": [
+    {
+      "molecule": "Rizatriptan",
+      "approved_age_minimum": 6,
+      "routes": ["Oral Tablet", "ODT"]
+    },
+    {
+      "molecule": "Almotriptan",
+      "approved_age_minimum": 12,
+      "routes": ["Oral Tablet"]
+    },
+    {
+      "molecule": "Zolmitriptan",
+      "approved_age_minimum": 12,
+      "routes": ["Nasal Spray"]
+    },
+    {
+      "molecule": "Ibuprofen",
+      "approved_age_minimum": 6,
+      "routes": ["Oral"]
+    },
+    {
+      "molecule": "Naproxen",
+      "approved_age_minimum": 12,
+      "routes": ["Oral"]
+    }
+  ],
+  "unapproved_agents": [
+    "Dihydroergotamine",
+    "Ergotamine",
+    "Eletriptan",
+    "Frovatriptan",
+    "Sumatriptan_SC"
+  ]
+}

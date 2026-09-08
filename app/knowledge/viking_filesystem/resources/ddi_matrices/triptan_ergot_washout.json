@@ -1,0 +1,10 @@
+{
+  "interaction_rule": "triptan_ergot_concurrent_use",
+  "severity": "CONTRAINDICATED",
+  "washout_hours_required": 24,
+  "mechanism": "Additive sustained coronary vasospasm and hypertensive crisis risk",
+  "affected_classes": [
+    "5-HT 1B/1D Agonists (Triptans)",
+    "Ergot Alkaloids (DHE, Ergotamine Tartrate)"
+  ]
+}
