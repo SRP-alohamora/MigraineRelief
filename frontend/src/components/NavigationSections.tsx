@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BookOpen, ExternalLink, Database, Code, GitBranch, ShieldCheck, FileText, CheckCircle2, ArrowRight, Play, Video, Clock, Newspaper, Brain, Zap, Activity, Construction, Wrench, AlertTriangle, Cpu, FlaskConical, ArrowDown, Scale, Network, Check, Copy, AlertCircle, Users, Layers, ShieldAlert, ArrowRightCircle, Heart } from 'lucide-react';
+import { VisualAuraSection } from './VisualAuraSection';
 
 /* 1. News Tab */
 export const NewsTab: React.FC = () => {
@@ -600,6 +601,9 @@ export const ClassificationTab: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
+      {/* Visual Aura Iconography & Patient Community Observations (Viana et al. Cephalalgia 2024 / NorHead / Migraine Trust) */}
+      <VisualAuraSection />
+
       <div className="border-b border-[#003764] pb-2">
         <h2 className="text-xl font-extrabold text-[#003764] uppercase tracking-wide">
           ICHD-3 Migraine Classification &amp; Diagnostic Criteria

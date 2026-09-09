@@ -12,6 +12,7 @@ import {
   HelpCircle,
   ChevronRight,
   Check,
+  Eye,
 } from 'lucide-react';
 import {
   MIGRAINE_FIELD_SCHEMA,
@@ -19,6 +20,7 @@ import {
   MigraineFieldConfig,
 } from '../lib/migraineFieldSchema';
 import { getGSTTimestamp, triggerFileDownload } from '../lib/gst_utils';
+import { AuraModal } from './AuraModal';
 
 export interface MigraineValuesMap {
   [key: string]: number;
@@ -51,6 +53,30 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [gstInfo, setGstInfo] = useState(() => getGSTTimestamp(loginName));
+  const [showAuraModal, setShowAuraModal] = useState(false);
+  const [selectedAuraIds, setSelectedAuraIds] = useState<number[]>([1]);
+  const [auraProgressionNotes, setAuraProgressionNotes] = useState<string>('');
+
+  const handleSaveAuraSelection = (selectedIds: number[], notes: string) => {
+    setSelectedAuraIds(selectedIds);
+    if (notes) {
+      setAuraProgressionNotes(notes);
+    }
+    // Automatically synchronize visual category dropdown to match selected IHS pattern
+    if (selectedIds.length > 0) {
+      if (selectedIds.some((id) => [3, 13, 27].includes(id))) {
+        handleFieldChange('Visual', 2); // Teichopsia / Fortification spectrum
+      } else if (selectedIds.some((id) => [4, 5, 14, 15, 16, 21].includes(id))) {
+        handleFieldChange('Visual', 3); // Scotoma / Blind spot
+      } else if (selectedIds.some((id) => [10, 11, 17, 18, 19, 20, 22, 23, 24, 25, 26].includes(id))) {
+        handleFieldChange('Visual', 4); // Complex / Metamorphopsia
+      } else if (selectedIds.some((id) => [1, 6, 7, 8, 9].includes(id))) {
+        handleFieldChange('Visual', 1); // Photopsia / Flashing spots
+      } else if (selectedIds.includes(0)) {
+        handleFieldChange('Visual', 0); // None
+      }
+    }
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -129,6 +155,10 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({
               governance: 'Zero PII / 23 Benchmark Inputs Evaluated',
             },
             input_features: formValues,
+            aura_details: {
+              selected_patterns: selectedAuraIds,
+              progression_notes: auraProgressionNotes,
+            },
             classification_outcome: {
               predicted_type: result.predicted_type,
               confidence_pct: result.confidence_pct,
@@ -272,9 +302,24 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({
                       {groupFields.map((field) => (
                         <div key={field.key} className="bg-slate-50/70 p-3 rounded-md border border-slate-200 space-y-1.5">
                           <div className="flex items-baseline justify-between">
-                            <label htmlFor={`field-${field.key}`} className="text-xs font-bold text-slate-800">
-                              {field.displayLabel}
-                            </label>
+                            <div className="flex items-center gap-1">
+                              <label htmlFor={`field-${field.key}`} className="text-xs font-bold text-slate-800">
+                                {field.displayLabel}
+                              </label>
+                              {field.key === 'Visual' && (
+                                <sup className="-top-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => setShowAuraModal(true)}
+                                    title="Open Visual Aura Pattern Selector (IHS Visual Aura Table: 28 Standardized Patterns)"
+                                    className="inline-flex items-center justify-center w-4 h-4 text-[10px] font-black text-white bg-[#005a9c] hover:bg-[#003764] rounded-full transition-transform hover:scale-110 shadow-xs ml-0.5 focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                                    aria-label="Open Visual Aura Information Modal"
+                                  >
+                                    i
+                                  </button>
+                                </sup>
+                              )}
+                            </div>
                             {field.required && (
                               <span className="text-[10px] text-slate-400 font-mono">Required</span>
                             )}
@@ -307,11 +352,108 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({
                             </select>
                           )}
 
+                          {field.key === 'Visual' && (
+                            <div className="pt-1.5 border-t border-slate-200/80 flex items-center justify-between gap-1 flex-wrap">
+                              <button
+                                type="button"
+                                onClick={() => setShowAuraModal(true)}
+                                className="text-[11px] font-bold text-[#005a9c] hover:text-[#003764] flex items-center gap-1 hover:underline"
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                                <span>Select Aura Patterns ({selectedAuraIds.length})</span>
+                              </button>
+                              {selectedAuraIds.length > 0 && (
+                                <div className="flex items-center gap-1 flex-wrap">
+                                  {selectedAuraIds.slice(0, 3).map((id) => (
+                                    <span key={id} className="text-[9px] font-mono font-bold bg-[#003764] text-cyan-300 px-1.5 py-0.5 rounded">
+                                      #{id}
+                                    </span>
+                                  ))}
+                                  {selectedAuraIds.length > 3 && (
+                                    <span className="text-[9px] font-bold text-slate-500">+{selectedAuraIds.length - 3}</span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+
                           <p className="text-[11px] text-slate-500 leading-snug">
                             {field.description}
                           </p>
                         </div>
                       ))}
+
+                      {/* Dedicated Separate Question: How does your aura change over time? */}
+                      {group.key === 'neurological_aura' && (
+                        <div className="sm:col-span-2 lg:col-span-3 bg-gradient-to-br from-blue-50/80 via-slate-50 to-indigo-50/40 p-4 rounded-lg border-2 border-blue-200 space-y-3 shadow-xs">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <div className="p-1.5 bg-[#005a9c] text-white rounded">
+                                <Clock className="w-4 h-4 text-cyan-300" />
+                              </div>
+                              <div>
+                                <label htmlFor="aura-evolution-input" className="text-xs sm:text-sm font-extrabold text-[#003764] block">
+                                  How does your aura change over time? (Sequence &amp; Evolution)
+                                </label>
+                                <p className="text-[11px] text-slate-500">
+                                  Capture the temporal march and transitions of your visual or sensory symptoms
+                                </p>
+                              </div>
+                            </div>
+
+                            <button
+                              type="button"
+                              onClick={() => setShowAuraModal(true)}
+                              className="text-xs font-bold text-[#005a9c] bg-white hover:bg-blue-50 px-2.5 py-1 rounded border border-blue-200 transition-colors inline-flex items-center gap-1 shadow-2xs self-start sm:self-auto"
+                            >
+                              <Eye className="w-3.5 h-3.5" />
+                              <span>Browse Visual Aura Table (#0–#27)</span>
+                            </button>
+                          </div>
+
+                          {/* Quick patient experience templates from Migraine Trust */}
+                          <div className="flex items-center gap-1.5 flex-wrap text-[10px]">
+                            <span className="font-bold text-slate-600">Sample sequences:</span>
+                            <button
+                              type="button"
+                              onClick={() => setAuraProgressionNotes((prev) => (prev ? `${prev}\nSequence: #8 colored spots ➔ #13 arcuate ring ➔ #3 jagged fortification ➔ #2 foggy blur` : 'Begins as #8 colored spots, then develops into #13 arcuate scintillating ring ➔ #3 expanding jagged fortification spectrum ➔ #2 foggy diffuse blur as headache sets in.'))}
+                              className="bg-white hover:bg-slate-100 text-slate-700 px-2 py-0.5 rounded border border-slate-200 font-mono hover:border-[#005a9c]"
+                            >
+                              #8 ➔ #13 ➔ #3 ➔ #2
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setAuraProgressionNotes((prev) => (prev ? `${prev}\nSingle white spot moving clockwise w/ tail` : 'Mine tend to be a single, white spot of light (#1). Moves in a clockwise rotation with a perceptible "tail" trailing behind across the visual field.'))}
+                              className="bg-white hover:bg-slate-100 text-slate-700 px-2 py-0.5 rounded border border-slate-200 hover:border-[#005a9c]"
+                            >
+                              Clockwise spot w/ tail
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setAuraProgressionNotes((prev) => (prev ? `${prev}\n#27 Grayscale fortification spectrum on contralateral side` : 'I get #3 but from the other side, and pure greyscale (#27). Monochromatic black-and-white zig-zag lines.'))}
+                              className="bg-white hover:bg-slate-100 text-slate-700 px-2 py-0.5 rounded border border-slate-200 hover:border-[#005a9c]"
+                            >
+                              #27 Grayscale zigzag
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setAuraProgressionNotes((prev) => (prev ? `${prev}\n#5 punctate blind spots ➔ #13 crescent` : 'Starts as tiny blind spots (#5) scattered around text, then fuses into a shimmering crescent (#13) drifting outward.'))}
+                              className="bg-white hover:bg-slate-100 text-slate-700 px-2 py-0.5 rounded border border-slate-200 font-mono hover:border-[#005a9c]"
+                            >
+                              #5 ➔ #13
+                            </button>
+                          </div>
+
+                          <textarea
+                            id="aura-evolution-input"
+                            rows={2}
+                            value={auraProgressionNotes}
+                            onChange={(e) => setAuraProgressionNotes(e.target.value)}
+                            placeholder="Describe how your aura evolves over minutes or hours (e.g. begins as #8 colored spots, evolves into #13 crescent on left side, lasts 30 minutes before headache starts)..."
+                            className="w-full px-3 py-2 text-xs border border-slate-300 rounded-md bg-white focus:border-[#005a9c] focus:outline-none focus:ring-1 focus:ring-[#005a9c]"
+                          />
+                        </div>
+                      )}
                     </div>
                   </fieldset>
                 );
@@ -365,6 +507,15 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({
           </>
         )}
       </div>
+
+      {/* Visual Aura Information & Pattern Selector Modal */}
+      <AuraModal
+        isOpen={showAuraModal}
+        onClose={() => setShowAuraModal(false)}
+        selectedAuraIds={selectedAuraIds}
+        onSaveSelection={handleSaveAuraSelection}
+        initialNotes={auraProgressionNotes}
+      />
     </div>
   );
 };
