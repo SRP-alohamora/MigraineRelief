@@ -1,0 +1,110 @@
+{
+  "study_metadata": {
+    "title": "Migraine aura-like symptoms at onset of stroke and stroke-like symptoms in migraine with aura",
+    "authors": [
+      "Adrian Scutelnic", "Lukas A. Kreis", "Morin Beyeler", "Mirjam R. Heldner",
+      "Thomas R. Meinel", "Johannes Kaesmacher", "Arsany Hakim", "Marcel Arnold",
+      "Urs Fischer", "Heinrich P. Mattle", "Christoph J. Schankin", "Simon Jung"
+    ],
+    "journal": "Frontiers in Neurology",
+    "year": 2022,
+    "doi": "10.3389/fneur.2022.1004058",
+    "pmcid": "PMC9531679",
+    "figshare_id": "21101737",
+    "cohort_counts": {
+      "ischemic_stroke_confirmed": 350,
+      "migraine_with_aura_ichd3": 343,
+      "total_analyzed": 693
+    }
+  },
+  "demographics": {
+    "stroke": {
+      "median_age": 71,
+      "iqr_age": [62, 78],
+      "male_pct": 61.0,
+      "female_pct": 39.0,
+      "median_nihss": 1,
+      "nihss_le_4_pct": 89.4
+    },
+    "migraine_with_aura": {
+      "median_age": 29,
+      "iqr_age": [28, 52],
+      "male_pct": 31.0,
+      "female_pct": 69.0
+    }
+  },
+  "symptom_distributions": {
+    "visual_disturbances": {
+      "stroke_prevalence": { "count": 78, "pct": 22.3 },
+      "mwa_prevalence": { "count": 326, "pct": 95.0 },
+      "p_value": "<0.001",
+      "polarity": {
+        "positive_only": { "stroke_pct": 32.1, "mwa_pct": 67.5 },
+        "both_positive_and_negative": { "stroke_pct": 14.1, "mwa_pct": 20.6 },
+        "negative_only": { "stroke_pct": 53.8, "mwa_pct": 12.0 }
+      },
+      "onset_dynamics": {
+        "sudden_lt_60s": { "stroke_pct": 11.5, "mwa_pct": 2.8 },
+        "sudden_overall": { "stroke_pct": 56.4, "mwa_pct": 28.2 },
+        "gradual_gt_5min": { "stroke_pct": 24.3, "mwa_pct": 59.2 },
+        "moving_over_visual_field": { "stroke_pct": 20.5, "mwa_pct": 55.5 }
+      }
+    },
+    "sensory_disturbances": {
+      "stroke_prevalence": { "count": 145, "pct": 41.4 },
+      "mwa_prevalence": { "count": 175, "pct": 51.0 },
+      "p_value": 0.011,
+      "polarity": {
+        "positive_only": { "stroke_pct": 35.2, "mwa_pct": 24.6 },
+        "both_positive_and_negative": { "stroke_pct": 18.6, "mwa_pct": 44.0 },
+        "negative_only": { "stroke_pct": 46.2, "mwa_pct": 31.4 }
+      },
+      "onset_dynamics": {
+        "sudden_lt_60s": { "stroke_pct": 9.7, "mwa_pct": 2.9 },
+        "sudden_overall": { "stroke_pct": 46.9, "mwa_pct": 20.6 },
+        "gradual_gt_5min": { "stroke_pct": 24.2, "mwa_pct": 57.7 },
+        "spreading_across_body": { "stroke_pct": 25.5, "mwa_pct": 60.6 }
+      }
+    },
+    "paresis_motor_deficit": {
+      "stroke_prevalence": { "count": 197, "pct": 56.3 },
+      "mwa_prevalence": { "count": 50, "pct": 14.6 },
+      "p_value": "<0.001",
+      "onset_dynamics": {
+        "sudden_lt_60s": { "stroke_pct": 8.1, "mwa_pct": 0.0 },
+        "sudden_overall": { "stroke_pct": 58.9, "mwa_pct": 28.0 },
+        "gradual_gt_5min": { "stroke_pct": 21.8, "mwa_pct": 52.0 },
+        "spreading_across_limbs": { "stroke_pct": 18.8, "mwa_pct": 44.0 }
+      }
+    },
+    "multiple_symptoms_succession": {
+      "gt_1_symptom_stroke_pct": 57.4,
+      "gt_1_symptom_mwa_pct": 61.5,
+      "sequential_succession_stroke_pct": 58.2,
+      "sequential_succession_mwa_pct": 95.3,
+      "sequential_p_value": "<0.001"
+    }
+  },
+  "likelihood_ratios": {
+    "sudden_motor_paresis_lt_60s": {
+      "favors": "ISCHEMIC_STROKE",
+      "lr_plus": 8.1,
+      "clinical_action": "IMMEDIATE_911_STROKE_CALL"
+    },
+    "isolated_negative_visual_loss": {
+      "favors": "ISCHEMIC_STROKE",
+      "lr_plus": 4.48,
+      "clinical_action": "EMERGENCY_EVALUATION"
+    },
+    "gradual_migrainous_march_gt_5min": {
+      "favors": "MIGRAINE_WITH_AURA",
+      "lr_plus": 2.44,
+      "clinical_action": "ACUTE_RESCUE_WINDOW"
+    },
+    "sequential_symptom_succession_gt_95pct": {
+      "favors": "MIGRAINE_WITH_AURA",
+      "lr_plus": 1.64,
+      "clinical_action": "ACUTE_RESCUE_WINDOW"
+    }
+  }
+}

@@ -81,6 +81,55 @@ class PriorRegistry:
             )
         )
 
+        # 5. BMJ 2024 AMADEUS Network Meta-Analysis Priors (17 Acute Drugs, 137 RCTs, 89,445 Patients)
+        self._load_amadeus_bmj2024_priors()
+
+    def _load_amadeus_bmj2024_priors(self) -> None:
+        """Loads canonical priors from the BMJ 2024 AMADEUS Network Meta-Analysis (Karlsson et al. / PMC11409395)."""
+        import os
+        import json
+
+        data_path = os.path.join(
+            os.path.dirname(__file__), "..", "data", "amadeus_bmj2024", "amadeus_17_drugs_meta_analysis.json"
+        )
+        if not os.path.exists(data_path):
+            return
+
+        with open(data_path, "r") as f:
+            data = json.load(f)
+
+        drugs = data.get("drugs", {})
+        for key, drug in drugs.items():
+            prior_id = f"PRIOR_AMADEUS_{key.upper()}"
+            mean_rate = float(drug.get("mean_2h_pain_free_rate", 0.25))
+            # Parameterize Beta(alpha, beta) centered on mean_rate with pseudo-sample size of 10
+            alpha = round(mean_rate * 10.0, 2)
+            beta_val = round((1.0 - mean_rate) * 10.0, 2)
+
+            self.register(
+                PopulationPrior(
+                    prior_id=prior_id,
+                    target_metric="2h_pain_free_rate",
+                    description=f"BMJ 2024 NMA 2h pain freedom prior for {drug.get('drug_name')}.",
+                    source_dataset="BMJ 2024;386:e080107 (Karlsson et al. / PMC11409395)",
+                    evidence_level=2,
+                    alpha=alpha,
+                    beta=beta_val,
+                    mean_rate=mean_rate,
+                    confidence_interval=drug.get("ci_95_2h", []),
+                    odds_ratio_vs_placebo=drug.get("or_pain_free_2h_vs_placebo"),
+                    ci_95=drug.get("ci_95_2h", []),
+                    drug_name=drug.get("drug_name"),
+                    drug_class=drug.get("drug_class"),
+                    routes=drug.get("routes", []),
+                    cinema_confidence=drug.get("cinema_confidence"),
+                    vasoconstrictive=drug.get("vasoconstrictive_contraindication_cad", False),
+                    pediatric_cleared=drug.get("pediatric_cleared", False),
+                    gastric_stasis_bypass=drug.get("gastric_stasis_bypass", False),
+                    disclaimer="AMADEUS 2024 PRIOR: Derived from 137 randomized controlled trials (N=89,445). Anchors baseline Bayesian expectation.",
+                )
+            )
+
     def register(self, prior: PopulationPrior) -> None:
         self._priors[prior.prior_id] = prior
 
@@ -89,3 +138,17 @@ class PriorRegistry:
 
     def list_priors(self) -> List[PopulationPrior]:
         return list(self._priors.values())
+
+    def get_amadeus_priors(self) -> List[PopulationPrior]:
+        """Returns all priors derived from the BMJ 2024 AMADEUS network meta-analysis."""
+        return [p for p in self._priors.values() if p.prior_id.startswith("PRIOR_AMADEUS_")]
+
+    def get_prior_for_drug(self, drug_name: str) -> Optional[PopulationPrior]:
+        """Finds prior by matching drug name substring."""
+        target = drug_name.lower().replace(" ", "_")
+        for prior in self._priors.values():
+            if prior.drug_name and target in prior.drug_name.lower().replace(" ", "_"):
+                return prior
+            if prior.prior_id.lower().endswith(target):
+                return prior
+        return None

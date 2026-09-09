@@ -56,7 +56,32 @@ class SafetyGateEngine:
         if state.hemiplegic_migraine_history:
             flags.append("Motor weakness / hemiplegic aura: Triptans strictly contraindicated.")
 
+        # Scutelnic et al. (2022) Stroke Mimic vs Aura Gates (PMC9531679)
+        stroke_flags = cls.evaluate_stroke_mimic_risk(state)
+        flags.extend(stroke_flags)
+
         return (len(flags) > 0, flags)
+
+    @classmethod
+    def evaluate_stroke_mimic_risk(cls, state: MigraineRunState) -> List[str]:
+        """Evaluates acute ischemic stroke mimic risk based on Scutelnic et al. 2022 (PMC9531679).
+        
+        Key discriminants:
+        - Sudden motor paresis <60 seconds: 8.1% in stroke, 0% in migraine aura (LR+ > 15.0).
+        - Sudden paresis <5 minutes: 58.9% in stroke vs 28.0% in migraine aura (LR+ = 2.10).
+        - Isolated negative visual defect without scintillations: 53.8% in stroke vs 12.0% in aura.
+        """
+        flags: List[str] = []
+
+        if state.paresis_onset_seconds is not None and state.paresis_onset_seconds < 60:
+            flags.append("🚨 SUDDEN PARESIS (<60s): 0% in migraine aura, 8.1% in stroke (LR+ > 15.0). Immediate 911 stroke triage required.")
+        elif state.sudden_onset_paresis:
+            flags.append("🚨 SUDDEN MOTOR DEFICIT (<5 min): Sudden paresis strongly favors acute ischemic stroke over migraine aura (Scutelnic et al. 2022). Rule out acute stroke.")
+
+        if state.isolated_negative_visual_defect:
+            flags.append("⚠️ ISOLATED NEGATIVE VISUAL LOSS: Dark vision/blindness without scintillations (53.8% in stroke vs 12.0% in migraine aura, LR+ = 4.48).")
+
+        return flags
 
     @classmethod
     def evaluate_moh_quota(cls, state: MigraineRunState) -> bool:

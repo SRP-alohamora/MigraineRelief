@@ -16,6 +16,7 @@ class TaskType(str, Enum):
     SEVERITY_PREDICTION = "severity_prediction"
     ATTACK_RISK_PREDICTION = "attack_risk_prediction"
     POPULATION_DIFFERENTIATION = "population_differentiation"
+    STROKE_AURA_DIFFERENTIATION = "stroke_aura_differentiation"
 
 
 class DatasetMetadata(BaseModel):

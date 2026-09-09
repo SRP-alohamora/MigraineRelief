@@ -59,6 +59,9 @@ class MigraineRunState(BaseModel):
     pregnancy_status: bool = Field(default=False, description="Active pregnancy contraindication flag")
     cardiovascular_disease: bool = Field(default=False, description="CAD / stroke / coronary vasospasm history")
     hemiplegic_migraine_history: bool = Field(default=False, description="Motor weakness / hemiplegic aura history")
+    sudden_onset_paresis: bool = Field(default=False, description="Motor weakness appearing in <5 minutes (Scutelnic 2022 stroke mimic red flag)")
+    isolated_negative_visual_defect: bool = Field(default=False, description="Dark vision / blindness without positive scintillations (Scutelnic 2022)")
+    paresis_onset_seconds: Optional[int] = Field(default=None, description="Exact onset speed of motor weakness in seconds")
     approved_medications: List[str] = Field(default_factory=list, description="Prescribed medications formulary")
 
     # Deterministic Triage & Safety State
