@@ -216,6 +216,12 @@ flowchart TD
     Graph_Store -.->|Async Update| N_of_1_Store
 ```
 
+### 5.1 Identity & Account Persistence Layer (`SRP-alohamora/supabase-opensrc-auth`)
+* **Open-Source Auth & RBAC**: Integrated via [`SRP-alohamora/supabase-opensrc-auth`](https://github.com/SRP-alohamora/supabase-opensrc-auth). Provides secure user registration, email/magic-link login, cryptographic session JWTs, and administrative role enforcement.
+* **Persistent Clinical State**: Authenticated users have customized intake forms, aura configurations, and personalized rescue protocol preferences persisted directly into PostgreSQL via Row-Level Security (RLS).
+* **Administrative Governance**: An Admin console enables system administrators to reset passwords, view all accounts, and archive or permanently purge accounts (GDPR right-to-be-forgotten).
+* **Near-$0 COGS Guarantee**: Deployed via free managed cloud tiers (up to 50k MAU) or self-hosted sovereign Docker containers alongside FastAPI, ensuring zero marginal cost per user.
+
 ---
 
 ## 6. Detailed Feature Specifications
@@ -295,6 +301,42 @@ flowchart TD
     - **P**ostural aggravation or papilledema.
   - **Action**: If any SNOOP4 flag triggers, the app locks acute guidance, displays an unclosable red alert banner, and instructs immediate 911 / emergency department consultation.
 
+### Feature 8: Open-Source Account Authentication & Clinical State Persistence (`SRP-alohamora/supabase-opensrc-auth`)
+* **Goal**: Provide enterprise-grade, privacy-preserving account creation, secure login, and cross-device synchronization of patient clinical profiles and customized rescue protocols with near-zero infrastructure cost.
+* **Authentication Engine**:
+  - Implements the open-source Supabase GoTrue authentication engine ([`SRP-alohamora/supabase-opensrc-auth`](https://github.com/SRP-alohamora/supabase-opensrc-auth)).
+  - Supported authentication modes:
+    - **Email & Password Authentication**: Argon2id / bcrypt password hashing with rate-limited brute-force protection.
+    - **Magic Link / Passwordless Authentication**: One-time cryptographic email tokens for low-friction, password-free login.
+    - **Role-Based Token Claims**: Issues cryptographically signed JSON Web Tokens (JWT) containing `user_id`, `email`, and role claims (`authenticated`, `admin`).
+  - Strict anonymous-to-authenticated upgrade path: Users can begin as `anonymousPatient_0` and later bind their local encrypted history to an authenticated account with one click.
+* **User Customization & Form Submission Persistence**:
+  - **Clinical Intake Synchronization**: When an authenticated user completes or customizes the diagnostic questionnaire (baseline migraine features, aura patterns, nausea susceptibility, allodynia velocity, past triptan adverse events, pediatric indicators):
+    - Submitting the form immediately persists the clinical state vector to the `patient_custom_intakes` table in PostgreSQL, keyed to `auth.uid()`.
+    - **Row-Level Security (RLS)**: Enforces strict tenant isolation (`auth.uid() = user_id`). Users can only read, write, or update their own personal clinical record.
+    - **Rescue Protocol Customization**: Patients and their physicians can adjust their rescue kit (e.g., customizing default Tier-1 oral vs. Tier-2 non-oral formulations, antiemetic adjuvants, and dosage limits). This is stored in `patient_custom_intakes.customized_protocol`.
+    - **Cross-Device State Rehydration**: Logging in on any secondary device, smartphone, or browser instantly rehydrates the saved questionnaire choices, customized rescue parameters, and rolling MOH counters, replacing ephemeral `localStorage` while retaining offline-first IndexedDB caching.
+
+### Feature 9: Role-Based Admin Management & User Administration
+* **Goal**: Empower clinical operations, system administrators, and principal investigators to administer user accounts, resolve login lockouts via password resets, manage account lifecycles, and enforce data governance without engineering intervention.
+* **Admin Role & Access Gate**:
+  - System provisions an initial pre-seeded `admin` account with elevated claims (`app_metadata: { role: 'admin' }`).
+  - All administrative API endpoints (`/admin/*`) and UI views (`/admin`) enforce dual-layer cryptographic verification:
+    1. Client-side route guard: Checks JWT role claim before rendering admin navigation or pages.
+    2. Backend FastAPI / PostgREST safety gate: Deterministically verifies RS256/HS256 signature and asserts `claims['role'] == 'admin'`, returning `403 Forbidden` for unauthorized actors.
+* **Administrative Capabilities**:
+  1. **Account Directory Dashboard (`/admin`)**:
+     - Interactive, paginated, searchable, and filterable table displaying all registered platform accounts.
+     - Metadata columns: User ID (UUID), Email / Account Identifier, Registration Date (UTC), Last Active Timestamp, Account Status (`Active`, `Suspended`, `Archived`), Custom Clinical Profile Status (`Configured [View]` vs `Pending`), Rolling MOH Days.
+     - Search & filtering: Fast lookup by email, status, registration date range, or clinical profile completeness.
+  2. **Admin Password Reset**:
+     - Admin can trigger an automated password recovery email dispatch or generate a secure, temporary, single-use password recovery link for any user experiencing authentication lockout.
+     - Admin can directly set a provisional password requiring forced reset upon next login for assisted clinical onboarding.
+  3. **Account Deletion & Archival Governance**:
+     - **Soft Archival (`ARCHIVED`)**: Admin can mark an account as archived. Instantly revokes active JWT sessions and refresh tokens, preventing future logins while preserving anonymized clinical outcome vectors for longitudinal research models (if patient consented).
+     - **Hard Purge (GDPR / HIPAA Right-to-be-Forgotten)**: Admin can execute a permanent delete operation, cascading deletion across `auth.users`, `user_profiles`, and `patient_custom_intakes`, completely obliterating any trace of the user's data from the active database.
+     - **Audit Logging**: Every administrative action (password reset, status change, archival, deletion) is permanently appended to `admin_audit_logs` with admin UUID, target user UUID, timestamp, action type, and IP/user-agent metadata.
+
 ---
 
 ## 7. Data Strategy & Privacy Architecture
@@ -330,6 +372,101 @@ Every closed-loop rescue event contributes to a multi-dimensional comparative ef
 * **Edge (Intervention & Timing)**: `[Drug_Class, Molecule, Route, Timing_Δt, Adjuvant]`
 * **Node (Outcome)**: `[2h_Pain_Freedom, Regurgitation_Rate, 24h_Recurrence, Functional_Restoration]`
 
+### 7.3 Account Authentication, Relational Schema & Near-$0 COGS Mandate
+To maintain uncompromising commercial viability, enterprise scalability, and patient privacy, MigraineRelief integrates the open-source Supabase stack ([`SRP-alohamora/supabase-opensrc-auth`](https://github.com/SRP-alohamora/supabase-opensrc-auth)) with an explicit Near-$0 Cost of Goods Sold (COGS) architecture.
+
+#### 7.3.1 Near-$0 COGS Architectural Strategy
+```
++------------------------------------------------------------------------------------------------------+
+|                                    NEAR-$0 COGS INFRASTRUCTURE MODEL                                 |
++----------------------+-----------------------------------------------+-------------------------------+
+| Layer                | Technology & Provider                         | Cost Structure                |
++----------------------+-----------------------------------------------+-------------------------------+
+| Frontend Hosting     | Netlify Free Tier (Static React/Vite SPA)     | $0.00 / month (100GB egress)  |
+| Identity & Auth      | Supabase Auth (GoTrue Open Source Engine)     | $0.00 / month (Up to 50k MAU) |
+| Relational Database  | Supabase Managed PostgreSQL or Self-Hosted    | $0.00 / month (500MB DB free) |
+| API & Rescue Compute | FastAPI Monolith (Free-tier Edge / Micro VM)  | $0.00 / month ($0–$5 max)     |
+| Real-Time Triage     | Client-Side WebAssembly & Local IndexedDB     | $0.00 (Zero server compute)   |
++----------------------+-----------------------------------------------+-------------------------------+
+| TOTAL COGS PER USER  | Up to 50,000 Active Monthly Users             | $0.000 / active user / month  |
++----------------------+-----------------------------------------------+-------------------------------+
+```
+
+* **Zero-Cost Deployment Options**:
+  - **Tier 1 (Default Managed Cloud)**: Utilizes the official Supabase Free Tier powered by the open-source engine: provides up to 50,000 Monthly Active Users (MAUs), 500MB PostgreSQL storage, 1GB file storage, and unlimited API requests at **$0/month**. Combined with Netlify's 100GB free bandwidth, initial operating COGS is strictly **$0.00**.
+  - **Tier 2 (Self-Hosted Sovereign Container)**: When scaling beyond 50,000 users or under strict institutional data sovereignty, the entire [`SRP-alohamora/supabase-opensrc-auth`](https://github.com/SRP-alohamora/supabase-opensrc-auth) container stack (GoTrue, PostgREST, PostgreSQL) runs directly via Docker Compose alongside FastAPI on existing sovereign compute, eliminating all per-seat and per-MAU vendor licensing fees.
+
+#### 7.3.2 Relational Database & Security Schema
+
+```sql
+-- 1. Profiles Table (Linked to open-source auth.users)
+CREATE TABLE public.user_profiles (
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    email TEXT NOT NULL,
+    role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'admin')),
+    status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'suspended', 'archived')),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 2. Patient Customized Intake & Clinical Profile Table
+CREATE TABLE public.patient_custom_intakes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    form_values JSONB NOT NULL DEFAULT '{}'::jsonb,
+    aura_patterns TEXT[] NOT NULL DEFAULT '{}',
+    customized_protocol JSONB NOT NULL DEFAULT '{}'::jsonb,
+    aura_progression_notes TEXT,
+    gst_timestamp TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT uq_patient_user UNIQUE (user_id)
+);
+
+-- 3. Administrative Audit Log Table
+CREATE TABLE public.admin_audit_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    admin_id UUID NOT NULL REFERENCES auth.users(id),
+    target_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+    action TEXT NOT NULL CHECK (action IN ('RESET_PASSWORD', 'CHANGE_STATUS', 'ARCHIVE_USER', 'DELETE_USER')),
+    details JSONB DEFAULT '{}'::jsonb,
+    timestamp_utc TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 4. Row-Level Security (RLS) Policies
+ALTER TABLE public.user_profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.patient_custom_intakes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.admin_audit_logs ENABLE ROW LEVEL SECURITY;
+
+-- Patients can view and update only their own profile
+CREATE POLICY "Users can read own profile" ON public.user_profiles
+    FOR SELECT USING (auth.uid() = id);
+
+-- Patients can view and update only their own custom intake data
+CREATE POLICY "Users can read own intake" ON public.patient_custom_intakes
+    FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can upsert own intake" ON public.patient_custom_intakes
+    FOR ALL USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+-- Admins have full read/write visibility across profiles and intakes
+CREATE POLICY "Admins full access profiles" ON public.user_profiles
+    FOR ALL USING (
+        EXISTS (SELECT 1 FROM public.user_profiles WHERE id = auth.uid() AND role = 'admin')
+    );
+
+CREATE POLICY "Admins read intakes" ON public.patient_custom_intakes
+    FOR SELECT USING (
+        EXISTS (SELECT 1 FROM public.user_profiles WHERE id = auth.uid() AND role = 'admin')
+    );
+
+CREATE POLICY "Admins full access audit logs" ON public.admin_audit_logs
+    FOR ALL USING (
+        EXISTS (SELECT 1 FROM public.user_profiles WHERE id = auth.uid() AND role = 'admin')
+    );
+```
+
 ---
 
 ## 8. User Experience (UX) & Design Specifications
@@ -359,6 +496,48 @@ Every closed-loop rescue event contributes to a multi-dimensional comparative ef
    |  MOH Ledger: 4/10 Triptan days used this month (Safe Zone)  |
    +-------------------------------------------------------------+
    ```
+4. **User Authentication & Clinical Profile Synchronization UX**:
+   ```
+   +-------------------------------------------------------------+
+   |  🔑 MIGRAINERELIEF SECURE ACCESS                 [✕ CLOSE]  |
+   +-------------------------------------------------------------+
+   |  [ Log In ]                        [ Create New Account ]   |
+   |                                                             |
+   |  Email Address:                                             |
+   |  [ patient@example.com                                    ] |
+   |                                                             |
+   |  Password:                                                  |
+   |  [ •••••••••••••••••                                      ] |
+   |                                                             |
+   |  [ Forgot password? ]                                       |
+   |                                                             |
+   |  [ 🔒 SIGN IN TO ACCOUNT ]        [ ⚡ SEND MAGIC LINK ]     |
+   |                                                             |
+   |  -------------------------- OR ---------------------------- |
+   |  [ 🛡️ Continue as Anonymous Guest (Zero PII / Local Only) ] |
+   +-------------------------------------------------------------+
+   |  ✓ When logged in: All customized intake features, aura     |
+   |    progression notes & tailored rescue protocols sync here. |
+   +-------------------------------------------------------------+
+   ```
+5. **Administrative Console Dashboard UX (`/admin`)**:
+   ```
+   +------------------------------------------------------------------------------------------------------+
+   |  🛡️ MIGRAINERELIEF ADMINISTRATIVE CONSOLE                                            [Admin: Dr. Sarah] |
+   +------------------------------------------------------------------------------------------------------+
+   |  📊 TOTAL REGISTERED USERS: 1,428  |  🟢 ACTIVE: 1,392  |  📁 ARCHIVED: 36  |  ⚙️ COGS: $0.00/mo        |
+   +------------------------------------------------------------------------------------------------------+
+   |  🔍 Search: [ filter by email or UUID...       ]   Status: [ All ▼ ]   Profile: [ Configured ▼ ]     |
+   +------------------------------------------------------------------------------------------------------+
+   |  USER ID       | EMAIL              | REGISTERED  | PROFILE      | STATUS   | ACTIONS                |
+   |  8f3d19a2...   | alexa@school.edu   | 2026-08-12  | Configured   | Active   | [Reset Pwd] [Archive]  |
+   |  c4b721e0...   | claire@corp.org    | 2026-08-14  | Configured   | Active   | [Reset Pwd] [Archive]  |
+   |  d910a3f5...   | user39@med.org     | 2026-09-01  | Pending      | Active   | [Reset Pwd] [Archive]  |
+   |  fa22091c...   | test_old@lab.net   | 2026-07-20  | Configured   | Archived | [Restore]   [Delete]   |
+   +------------------------------------------------------------------------------------------------------+
+   |  [◀ Previous Page]                                                                [Next Page ▶]      |
+   +------------------------------------------------------------------------------------------------------+
+   ```
 
 ---
 
@@ -383,7 +562,9 @@ Every closed-loop rescue event contributes to a multi-dimensional comparative ef
 | (Months 1–4)      | • In-Attack Copilot (<3-tap emergency flow) | • ≥75% of attacks logged in-event|
 |                   | • Gastric Stasis Route-Switching Engine     | • 2h outcome completion ≥60%     |
 |                   | • MOH Monthly Quota Ledger                  | • Zero SNOOP4 triage escapes     |
-|                   | • Day-0 Bayesian Literature Priors          |                                  |
+|                   | • Day-0 Bayesian Literature Priors          | • Near-$0 COGS verified          |
+|                   | • Supabase Open-Source Auth & Persistence   | • Zero security/auth regressions |
+|                   | • Admin Console: Reset, Archive, Delete     |                                  |
 +-------------------+---------------------------------------------+----------------------------------+
 | Phase 2: N-of-1   | • Personal PK Window Profiler (Attacks 1–5) | • 2,500 active users             |
 | (Months 5–9)      | • Cumulative Stressor Threshold Meter       | • First 10,000 closed-loop rescue|
