@@ -25,6 +25,13 @@ By closing the loop between **Context → Intervention → Timing → Response �
 * **[Historical Brainstorm Archive (brainstorm.md)](brainstorm.md)**: Initial exploratory brainstorming, multi-agent concepts, and clinical literature catalog.
 * **[Assets](assets/)**: Biomolecular visuals and architecture diagrams.
 
+## 🛠️ Specialized Open-Source Foundations
+MigraineRelief integrates four high-leverage open-source engineering assets:
+1. **[`supabase-opensrc-auth`](https://github.com/SRP-alohamora/supabase-opensrc-auth)**: Open-source GoTrue JWT authentication engine, PostgreSQL Row-Level Security (RLS), and RBAC admin governance. Provides cross-device clinical intake persistence, password reset workflows, and GDPR account deletion under a **Near-$0 COGS** architecture (<50k MAUs).
+2. **[`OpenViking_007`](https://github.com/SRP-alohamora/OpenViking_007)**: Hierarchical virtual context filesystem (`viking://`) reducing LLM prompt tokens by >80% via deterministic knowledge branch pruning.
+3. **[`awesome-harness-engineering_007`](https://github.com/SRP-alohamora/awesome-harness-engineering_007)**: CI/CD evaluation harness and scenario fuzzing verifying 100% recall on clinical contraindications across diverse golden cohort populations.
+4. **[`scientific-agent-skills_007`](https://github.com/SRP-alohamora/scientific-agent-skills_007)**: Real-time NCBI E-utilities PubMed citation verification, automated DDI rule checking, and dosage sanity limits.
+
 ## 👥 Core Clinical Personas
 1. **Alexa Rivera (Female, Age 15)** — High school sophomore with episodic probable migraine, navigating school-hours rescue decisions, pubertal hormonal shifts, sedation constraints, and high risk of rebound headache from OTC analgesics.
 2. **Claire Sterling (Female, Age 45)** — Professional and mother with chronic refractory migraine and severe acute gastric stasis (nausea & emesis), repeatedly failing oral medications due to malabsorption and delayed timing.

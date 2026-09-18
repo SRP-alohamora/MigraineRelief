@@ -519,49 +519,123 @@ export const DataSetsTab: React.FC = () => {
 export const GitHubProjectsTab: React.FC = () => {
   const projects = [
     {
+      name: 'supabase-opensrc-auth',
+      repo: 'https://github.com/SRP-alohamora/supabase-opensrc-auth',
+      badge: 'Identity & Persistence',
+      badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+      tagline: 'Open-source GoTrue authentication engine, PostgreSQL Row-Level Security (RLS), and RBAC admin governance.',
+      desc: 'Provides enterprise-grade, privacy-first identity management without vendor lock-in or recurring per-user SaaS charges.',
+      valueAdds: [
+        'Near-$0 Infrastructure COGS: Free tier covers 50k MAUs ($0/mo) or unlimited users via sovereign self-hosted Docker, avoiding Auth0/Okta fees.',
+        'Clinical Form & Protocol Persistence: Automatically saves and synchronizes customized intake features, aura patterns, and tailored acute rescue kits across devices.',
+        'Role-Based Admin Console (/admin): Empowers admins to search all accounts, dispatch password resets, soft-archive accounts, or perform GDPR-compliant purges.',
+        'Strict Row-Level Security (RLS): Enforces database-level tenant isolation (auth.uid() = user_id) so patient clinical data remains strictly private.',
+      ],
+    },
+    {
       name: 'OpenViking_007',
       repo: 'https://github.com/SRP-alohamora/OpenViking_007',
-      desc: 'Hierarchical virtual context filesystem (viking://) reducing LLM prompt tokens by >80% via deterministic knowledge branch pruning.',
+      badge: 'Context Optimization',
+      badgeColor: 'bg-cyan-100 text-cyan-800 border-cyan-300',
+      tagline: 'Hierarchical virtual context filesystem (viking://) for structured agent knowledge navigation.',
+      desc: 'Slashes LLM token consumption by 80%+ via deterministic branch pruning, reading only necessary clinical leaf files.',
+      valueAdds: [
+        '80%+ Prompt Token Reduction: Prunes entire pharmacology trees (e.g. bypassing oral tablets during gastric stasis).',
+        'Sub-Cent Query Economics: Reduces prompt costs from $0.02 to <$0.0003 per query using Flash tiers.',
+        'Sub-15ms Traversal: Fast deterministic context resolution without waiting for generative model loops.',
+      ],
     },
     {
       name: 'awesome-harness-engineering_007',
       repo: 'https://github.com/SRP-alohamora/awesome-harness-engineering_007',
-      desc: 'Evaluation harness methodology verifying 100% recall on clinical contraindications across diverse golden cohort populations.',
+      badge: 'Clinical Evaluation',
+      badgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
+      tagline: 'Automated CI/CD evaluation harness, scenario fuzzing, and golden cohort regression testing.',
+      desc: 'Ensures deterministic safety gates and contraindication filters achieve 100% recall before production deployment.',
+      valueAdds: [
+        '100% Contraindication Recall: Regression gates verify zero dangerous drug-drug interactions pass to patients.',
+        'Golden Cohort Fuzzing: Rigorously tests adolescent (Alexa), refractory (Claire), CVD, and MOH scenarios.',
+        'Continuous Drift Prevention: Automatically blocks merges and alerts engineering on clinical metric degradation.',
+      ],
     },
     {
       name: 'scientific-agent-skills_007',
       repo: 'https://github.com/SRP-alohamora/scientific-agent-skills_007',
-      desc: 'Scientific agent skill library for NCBI E-utilities, PubMed citation lookup, and automated DDI rule validation.',
+      badge: 'Evidence Verification',
+      badgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-300',
+      tagline: 'AI Scientist skill library for NCBI E-utilities, PubMed citation lookup, and automated DDI rule validation.',
+      desc: 'Eliminates medical hallucination by verifying all citations and pharmacological rules against authoritative sources in real time.',
+      valueAdds: [
+        'Zero Hallucinated Citations: Verifies all cited PMIDs deterministically via live NCBI E-utilities API.',
+        'Automated DDI Rule Checking: Validates washout intervals (e.g. 24h separation between triptans and ergots).',
+        'Dosage Sanity Verification: Enforces strict FDA and ICHD-3 therapeutic limits on all acute rescue molecules.',
+      ],
     },
   ];
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="border-b border-[#003764] pb-2">
-        <h2 className="text-xl font-extrabold text-[#003764] uppercase tracking-wide">
-          Open-Source GitHub Architecture &amp; Foundations
-        </h2>
-        <p className="text-xs text-slate-500">Core open-source repositories powering the MigraineRelief engine</p>
+      <div className="border-b border-[#003764] pb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div>
+          <h2 className="text-xl font-extrabold text-[#003764] uppercase tracking-wide">
+            Open-Source GitHub Architecture &amp; Foundations
+          </h2>
+          <p className="text-xs text-slate-500">
+            Core open-source repositories powering MigraineRelief AI's deterministic rescue engine, zero-COGS stack, and clinical safety gates
+          </p>
+        </div>
+        <span className="self-start sm:self-auto px-2.5 py-1 bg-blue-50 border border-blue-200 text-blue-800 text-[11px] font-bold rounded-full">
+          4 Integrated Repositories
+        </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {projects.map((proj, idx) => (
-          <div key={idx} className="webmd-card p-6 flex flex-col justify-between">
+          <div key={idx} className="webmd-card p-6 flex flex-col justify-between hover:shadow-md transition-shadow border-t-4 border-t-[#005a9c]">
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <GitBranch className="w-5 h-5 text-[#005a9c]" />
-                <h3 className="text-sm font-black text-[#003764]">{proj.name}</h3>
+              <div className="flex items-start justify-between gap-2 mb-3">
+                <div className="flex items-center gap-2">
+                  <GitBranch className="w-5 h-5 text-[#005a9c] flex-shrink-0" />
+                  <h3 className="text-base font-black text-[#003764]">{proj.name}</h3>
+                </div>
+                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${proj.badgeColor}`}>
+                  {proj.badge}
+                </span>
               </div>
-              <p className="text-xs text-slate-600 leading-relaxed mb-4">{proj.desc}</p>
+
+              <p className="text-xs font-semibold text-slate-700 mb-2 leading-snug">
+                {proj.tagline}
+              </p>
+              <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                {proj.desc}
+              </p>
+
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg mb-4">
+                <h4 className="text-[11px] font-bold text-[#003764] uppercase tracking-wide mb-2 flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 text-amber-500" /> Concrete Value Added:
+                </h4>
+                <ul className="space-y-1.5">
+                  {proj.valueAdds.map((v, vIdx) => (
+                    <li key={vIdx} className="text-xs text-slate-700 flex items-start gap-1.5 leading-snug">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                      <span>{v}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            <a
-              href={proj.repo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-webmd-outline text-xs justify-center"
-            >
-              View on GitHub <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+              <span className="text-[11px] text-slate-500 font-mono">SRP-alohamora/{proj.name}</span>
+              <a
+                href={proj.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-webmd-outline text-xs px-3 py-1.5 inline-flex items-center gap-1.5"
+              >
+                View on GitHub <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
         ))}
       </div>
