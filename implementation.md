@@ -18,6 +18,7 @@ This document provides a concrete, file-by-file engineering specification for bu
 3. **80%+ Token Reduction**: Context injection must strictly traverse the **[`OpenViking_007`](https://github.com/SRP-alohamora/OpenViking_007)** virtual filesystem (`viking://`), pruning irrelevant branches before feeding prompt contexts.
 4. **Zero-PII Client-Side Privacy**: All patient profile state is encrypted locally via Web Crypto `AES-GCM-256`. The cloud/backend communicates strictly via ephemeral, pseudonymized hashes (`anonymousPatient_0`).
 5. **100% Regression Test Coverage on Safety**: All builds must pass automated sub-population regression assertions via **[`awesome-harness-engineering_007`](https://github.com/SRP-alohamora/awesome-harness-engineering_007)** with $100\%$ Contraindication Recall Rate.
+6. **Near-$0 COGS Identity, Persistence & Admin Governance**: Integrated [`SRP-alohamora/supabase-opensrc-auth`](https://github.com/SRP-alohamora/supabase-opensrc-auth) open-source GoTrue JWT engine, PostgreSQL RLS, form customization persistence, and admin lifecycle services (password resets, account archival, GDPR purging) with zero per-user licensing fees.
 
 ---
 
@@ -30,6 +31,7 @@ Migraine/
 ├── PRD.md                                # Product Requirements Document
 ├── system_design.md                      # System Architecture & Low-COGS Blueprint
 ├── implementation.md                     # This technical implementation document
+├── netlify.toml                          # Netlify continuous deployment & SPA routing
 ├── pyproject.toml                        # Build system & dependency specification
 ├── requirements.txt                      # Pinned production dependencies
 ├── Dockerfile                            # Production container specification
@@ -40,6 +42,12 @@ Migraine/
 │   ├── __init__.py
 │   ├── main.py                           # FastAPI application entry point & lifespan
 │   ├── config.py                         # Pydantic Settings & environment loader
+│   ├── auth/                             # Supabase GoTrue JWT gateway & auth middleware
+│   │   ├── __init__.py
+│   │   └── supabase_gateway.py           # RS256/HS256 JWT verifier & RBAC guards
+│   ├── admin/                            # Administrative services & user lifecycle management
+│   │   ├── __init__.py
+│   │   └── account_service.py            # Password reset, account listing, archive, delete
 │   ├── core/
 │   │   ├── __init__.py
 │   │   ├── state.py                      # Pydantic v2 MigraineRunState schema
@@ -74,6 +82,8 @@ Migraine/
 │   │   ├── v1/
 │   │   │   ├── __init__.py
 │   │   │   ├── endpoints_rescue.py       # In-attack emergency rescue endpoint
+│   │   │   ├── endpoints_patient.py      # Patient data save & custom intake persistence
+│   │   │   ├── endpoints_admin.py        # /admin/users, /admin/reset-password, /admin/archive
 │   │   │   ├── endpoints_sandbox.py      # Anonymous drag-and-drop diagnostic parser
 │   │   │   └── endpoints_outcome.py      # 2h and 24h closed-loop outcome capture
 │   └── telemetry/
@@ -87,6 +97,9 @@ Migraine/
 │   └── src/
 │       ├── App.tsx                       # Main shell with dark-mode photophobia palette
 │       ├── components/
+│       │   ├── LoginModal.tsx            # GoTrue Auth integration (email/password/magic link)
+│       │   ├── AdminConsole.tsx          # Administrative user directory & action drawer
+│       │   ├── UploadDataModal.tsx       # Custom intake submission & persistence
 │       │   ├── EmergencyRescueButton.tsx # Giant <3-tap in-attack touch interface
 │       │   ├── RescueActionCard.tsx      # Immediate recommendation display
 │       │   ├── MOHQuotaMeter.tsx         # Rolling 30-day visual counter
@@ -105,6 +118,7 @@ Migraine/
     ├── test_safety_gates.py              # SNOOP4 & MOH 100% recall assertions
     ├── test_viking_pruning.py            # OpenViking token reduction verification
     ├── test_route_switching.py           # Gastric stasis non-oral switch logic
+    ├── test_auth_gateway.py              # JWT verification & admin RBAC test suite
     └── test_end_to_end_graph.py          # StateGraph execution run verification
 ```
 
@@ -587,7 +601,77 @@ async def evaluate_acute_rescue(payload: RescueRequest):
 
 ---
 
-## 10. Module 7: Automated Regression Test Suite (`tests/`)
+## 10. Module 7: Open-Source Supabase Auth, Form Customization & Admin Gateway (`app/auth/`, `app/admin/`)
+
+Implementing the open-source **[`supabase-opensrc-auth`](https://github.com/SRP-alohamora/supabase-opensrc-auth)** stack with near-$0 COGS:
+
+```python
+# app/auth/supabase_gateway.py
+import jwt
+from typing import Dict, Any, Optional
+from fastapi import HTTPException, Security, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from app.config import settings
+
+security = HTTPBearer()
+
+class SupabaseAuthGateway:
+    """Decodes and validates GoTrue JWTs and enforces RBAC."""
+    
+    def __init__(self, jwt_secret: str = settings.SUPABASE_JWT_SECRET):
+        self.jwt_secret = jwt_secret
+
+    def verify_token(self, credentials: HTTPAuthorizationCredentials = Security(security)) -> Dict[str, Any]:
+        """Validates GoTrue JWT signature and expiration."""
+        try:
+            payload = jwt.decode(
+                credentials.credentials,
+                self.jwt_secret,
+                algorithms=["HS256", "RS256"],
+                audience="authenticated",
+            )
+            return payload
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session expired")
+        except jwt.PyJWTError:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token signature")
+
+    def require_admin(self, credentials: HTTPAuthorizationCredentials = Security(security)) -> Dict[str, Any]:
+        """Ensures the caller has administrative rights."""
+        payload = self.verify_token(credentials)
+        role = payload.get("app_metadata", {}).get("role") or payload.get("role")
+        if role != "admin":
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Administrative access required")
+        return payload
+
+# app/admin/account_service.py
+class AdminAccountService:
+    """Manages user account lifecycles and administrative actions."""
+    
+    @staticmethod
+    async def list_accounts(page: int = 1, limit: int = 50, filter_status: Optional[str] = None):
+        """Returns paginated platform accounts from public.user_profiles."""
+        pass
+
+    @staticmethod
+    async def reset_password(user_id: str, new_password: Optional[str] = None) -> Dict[str, str]:
+        """Calls GoTrue admin API to generate reset link or update password."""
+        pass
+
+    @staticmethod
+    async def archive_account(user_id: str, admin_id: str, reason: str) -> bool:
+        """Soft-deletes user, revokes active sessions, and preserves anonymized vectors."""
+        pass
+
+    @staticmethod
+    async def purge_account(user_id: str, admin_id: str, reason: str) -> bool:
+        """Cascading hard delete across auth.users and clinical tables (GDPR)."""
+        pass
+```
+
+---
+
+## 11. Module 8: Automated Regression Test Suite (`tests/`)
 
 Incorporating **[`awesome-harness-engineering_007`](https://github.com/SRP-alohamora/awesome-harness-engineering_007)** principles to execute deterministic assertions against golden cohorts:
 
@@ -649,7 +733,7 @@ def test_sub_50ms_latency_budget(runner):
 
 ---
 
-## 11. Step-by-Step Engineering Execution Roadmap
+## 12. Step-by-Step Engineering Execution Roadmap
 
 ```
 +----------------------------------------------------------------------------------------------------+
@@ -673,27 +757,31 @@ def test_sub_50ms_latency_budget(runner):
 |        | & REST Endpoints      | • Build FastAPI endpoints `/rescue/evaluate` & `/sandbox/upload`   |
 |        |                       | • Integrate OpenTelemetry latency & CoT trajectory tracing        |
 +--------+-----------------------+-------------------------------------------------------------------+
-| Week 5 | Anonymous Diagnostic  | • Implement client-side Web Crypto `AES-GCM-256` key management   |
-|        | Sandbox (Frontend)    | • Build drag-and-drop parser for Apple Health export.xml          |
-|        |                       | • Render Day-0 historical audit with epistemic certainty badges   |
+| Week 5 | Open-Source Supabase  | • Integrate `supabase-opensrc-auth` GoTrue JWT gateway in FastAPI |
+|        | Auth & Persistence    | • Implement `public.patient_custom_intakes` & RLS policies        |
+|        |                       | • Persist customized form values and cross-device rehydration     |
 +--------+-----------------------+-------------------------------------------------------------------+
-| Week 6 | <3-Tap In-Attack UI   | • Build photophobia-optimized dark mode UI (<0.5 nits)            |
+| Week 6 | Admin Console & User  | • Build `/admin` dashboard table with account search and filter   |
+|        | Lifecycle Management  | • Implement admin password reset & OTP generation                 |
+|        |                       | • Implement soft-archival and cascading GDPR hard delete          |
++--------+-----------------------+-------------------------------------------------------------------+
+| Week 7 | <3-Tap In-Attack UI   | • Build photophobia-optimized dark mode UI (<0.5 nits)            |
 |        | & Mobile PWA          | • Giant ≥64px emergency attack touch interface                    |
 |        |                       | • Automated 2h and 24h push notification hooks                    |
 +--------+-----------------------+-------------------------------------------------------------------+
-| Week 7 | Automated CI/CD Eval  | • Integrate `awesome-harness-engineering_007` golden cohorts      |
+| Week 8 | Automated CI/CD Eval  | • Integrate `awesome-harness-engineering_007` golden cohorts      |
 |        | Harness & Benchmarks  | • Integrate `scientific-agent-skills_007` PubMed PMID validator   |
 |        |                       | • Verify zero false negatives on contraindication recall rate     |
 +--------+-----------------------+-------------------------------------------------------------------+
-| Week 8 | Containerization &    | • Build production Dockerfile & `docker-compose.yml`              |
-|        | Phase 0 Launch        | • End-to-end smoke testing with clinical advisors                 |
-|        |                       | • Phase 0 local deployment release                                |
+| Week 9 | Containerization &    | • Build production Dockerfile & `docker-compose.yml`              |
+|        | Near-$0 COGS Launch   | • End-to-end smoke testing with clinical advisors                 |
+|        |                       | • Deploy static SPA to Netlify and verify $0 fixed monthly COGS   |
 +--------+-----------------------+-------------------------------------------------------------------+
 ```
 
 ---
 
-## 12. Containerization & Production Deployment
+## 13. Containerization & Production Deployment
 
 ### 12.1 Production Dockerfile (`Dockerfile`)
 ```dockerfile
