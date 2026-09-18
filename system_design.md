@@ -3,7 +3,7 @@
 > **Document Version:** 1.0.0  
 > **Target Audience:** Core Engineering, ML Infrastructure, DevOps, Clinical Systems Architects  
 > **Companion Documents:** [`PRD.md`](PRD.md), [`README.md`](README.md), `migrainerelief_strategy.md` (Internal)  
-> **Key Integrated Projects:** [`OpenViking_007`](https://github.com/SRP-alohamora/OpenViking_007), [`awesome-harness-engineering_007`](https://github.com/SRP-alohamora/awesome-harness-engineering_007), [`scientific-agent-skills_007`](https://github.com/SRP-alohamora/scientific-agent-skills_007)
+> **Key Integrated Projects:** [`OpenViking_007`](https://github.com/SRP-alohamora/OpenViking_007), [`awesome-harness-engineering_007`](https://github.com/SRP-alohamora/awesome-harness-engineering_007), [`scientific-agent-skills_007`](https://github.com/SRP-alohamora/scientific-agent-skills_007), [`supabase-opensrc-auth`](https://github.com/SRP-alohamora/supabase-opensrc-auth)
 
 ---
 
@@ -13,10 +13,11 @@ MigraineRelief is a precision clinical decision engine engineered to optimize ac
 
 ### 1.1 Core Engineering Principles
 1. **Deterministic Speed Over Generative Bloat**: Acute rescue decisions happen when a patient is photosensitive, nauseated, and in 8/10 pain. Clinical safety gates (SNOOP4 red flags, pregnancy filters, Medication Overuse Headache limits) and route-switching algorithms run in **$<10\text{ms}$ deterministic code** without waiting for LLM token generation.
-2. **Sub-Cent Cost of Goods Sold (COGS)**: Sashing prompt token consumption by 75%–85% using **[OpenViking_007](https://github.com/SRP-alohamora/OpenViking_007)** hierarchical context navigation (`viking://`), local embedded ONNX models, and sub-cent inference tiers (Gemini 2.0 Flash / local quantized SLMs).
+2. **Sub-Cent Cost of Goods Sold (COGS)**: Slashing prompt token consumption by 75%–85% using **[OpenViking_007](https://github.com/SRP-alohamora/OpenViking_007)** hierarchical context navigation (`viking://`), local embedded ONNX models, and sub-cent inference tiers (Gemini 2.0 Flash / local quantized SLMs).
 3. **Phase 0 Fast-Path $\to$ Scalable Microservices Migration**: Delivering immediate single-user utility on Day 0 via a lightweight, local-first monolithic harness, while architecting explicit service boundaries for a high-throughput, distributed event-driven cloud deployment.
 4. **Strict Epistemic Traceability & Observability**: Every recommendation is an auditable chain of deterministic gates, verified PubMed citations via **[`scientific-agent-skills_007`](https://github.com/SRP-alohamora/scientific-agent-skills_007)**, and regression-tested assertions via **[`awesome-harness-engineering_007`](https://github.com/SRP-alohamora/awesome-harness-engineering_007)**.
 5. **Zero-Knowledge Privacy Architecture**: Operating under the anonymous schema `anonymousPatient_0` with client-side `AES-GCM-256` encryption, eliminating HIPAA/PHI liabilities.
+6. **Near-$0 COGS Identity & State Persistence**: Leveraging open-source **[`supabase-opensrc-auth`](https://github.com/SRP-alohamora/supabase-opensrc-auth)** (GoTrue + PostgreSQL RLS) to provide secure user registration, session tokens, custom form persistence, and admin account lifecycle controls (password reset, account archival, GDPR hard deletion) with zero per-user licensing fees.
 
 ---
 
@@ -74,7 +75,7 @@ When Persona 2 (Claire) triggers an attack with active emesis and nausea, the co
 +----------------------------------------------------------------------------------------------------+
 |                                      COGS & EFFICIENCY BENCHMARK                                   |
 +------------------------------------+---------------------------------------+-----------------------+
-| Metric                             | Standard Flat Vector RAG (Pinecone)   | MigraineRelief Stack  |
+| Metric                             | Standard Enterprise Cloud Stack       | MigraineRelief Stack  |
 +------------------------------------+---------------------------------------+-----------------------+
 | Input Context Size per Request     | 8,000 – 16,000 tokens                 | 1,200 – 1,800 tokens  |
 | Token Reduction Ratio              | Baseline (0%)                         | **80% – 88% Slashing**|
@@ -82,7 +83,12 @@ When Persona 2 (Claire) triggers an attack with active emesis and nausea, the co
 | Local Edge Inference Cost          | Requires 16GB–24GB VRAM GPU           | **$0.00 (8GB CPU/Mac)**|
 | Local Embedding Engine             | Remote OpenAI `text-embedding-3-small`| FastEmbed ONNX (Local)|
 | Real-Time Rescue Response Latency  | 2,500 – 4,500 ms                      | **<45 ms (Client/Edge)**|
-| Database Infrastructure Cost       | $70+/mo Pinecone Pod                  | **$0.00 (DuckDB/Lance)|
+| Vector Database Infrastructure     | $70+/mo Pinecone Pod                  | **$0.00 (DuckDB/Lance)|
+| Authentication & Identity Service  | $0.05/MAU (Auth0 / Okta Enterprise)   | **$0.00 (Supabase GoTrue)**|
+| Web Hosting & CDN Delivery         | $20+/mo (AWS Amplify / Vercel Pro)    | **$0.00 (Netlify Free)**|
+| Relational Storage (User State)    | $25+/mo (AWS RDS Postgres)            | **$0.00 (Supabase 500MB/Docker)**|
++------------------------------------+---------------------------------------+-----------------------+
+| TOTAL MONTHLY COGS (<50k MAUs)     | **$120.00 – $250.00+ / month**        | **$0.00 / month**     |
 +------------------------------------+---------------------------------------+-----------------------+
 ```
 
@@ -457,7 +463,7 @@ flowchart TD
 
 ## 6. Integration of Specialized Ecosystem Repositories
 
-MigraineRelief avoids reinventing foundational agent tooling by deeply integrating three high-leverage open-source engineering assets referenced in `brainstorm.md`:
+MigraineRelief avoids reinventing foundational agent tooling by deeply integrating four high-leverage open-source engineering assets referenced in `brainstorm.md`:
 
 ```
 +----------------------------------------------------------------------------------------------------+
@@ -476,6 +482,10 @@ MigraineRelief avoids reinventing foundational agent tooling by deeply integrati
 | **scientific-agent-skills_007**| AI Scientist tools: PubMed PMID   | • Zero hallucinated citations |
 | (SRP-alohamora/                | verifiers, DDI checkers, and      | • Deterministic DDI filters   |
 |  scientific-agent-skills_007)  | dosage sanity calculators         | • Pharmacological compliance  |
++--------------------------------+-----------------------------------+-------------------------------+
+| **supabase-opensrc-auth**      | GoTrue JWT authentication engine, | • Near-$0 COGS (<50k MAUs)    |
+| (SRP-alohamora/                | PostgreSQL RLS security policies, | • Cross-device form sync      |
+|  supabase-opensrc-auth)        | and admin lifecycle controls      | • Admin password reset/purge  |
 +--------------------------------+-----------------------------------+-------------------------------+
 ```
 
@@ -524,6 +534,73 @@ def verify_pmid_citation(pmid: str) -> bool:
         data = resp.json()
         return pmid in data.get("result", {})
     return False
+```
+
+### 6.3 Supabase Open-Source Auth & Administrative Gateway Implementation
+```python
+# app/auth/supabase_gateway.py
+import jwt
+from typing import Dict, Any, List, Optional
+from fastapi import HTTPException, Security, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from app.config import settings
+
+security = HTTPBearer()
+
+class SupabaseAuthGateway:
+    """Validates GoTrue JWT tokens and enforces RBAC across clinical & admin endpoints."""
+    
+    def __init__(self, jwt_secret: str = settings.SUPABASE_JWT_SECRET):
+        self.jwt_secret = jwt_secret
+
+    def verify_token(self, credentials: HTTPAuthorizationCredentials = Security(security)) -> Dict[str, Any]:
+        """Decodes and cryptographically verifies JWT issued by GoTrue auth engine."""
+        try:
+            payload = jwt.decode(
+                credentials.credentials,
+                self.jwt_secret,
+                algorithms=["HS256", "RS256"],
+                audience="authenticated",
+            )
+            return payload
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session expired")
+        except jwt.PyJWTError:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token signature")
+
+    def require_admin(self, credentials: HTTPAuthorizationCredentials = Security(security)) -> Dict[str, Any]:
+        """Deterministic safety check ensuring caller possesses elevated admin claims."""
+        payload = self.verify_token(credentials)
+        role = payload.get("app_metadata", {}).get("role") or payload.get("role")
+        if role != "admin":
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Administrative role required")
+        return payload
+
+# app/admin/account_service.py
+class AdminAccountService:
+    """Executes administrative account operations with audit logging."""
+
+    @staticmethod
+    async def list_all_accounts(admin_id: str, page: int = 1, limit: int = 50) -> Dict[str, Any]:
+        """Fetches paginated list of platform user accounts with profile status."""
+        # Queries public.user_profiles joined with patient_custom_intakes
+        pass
+
+    @staticmethod
+    async def reset_user_password(admin_id: str, target_user_id: str, new_temp_password: Optional[str] = None) -> Dict[str, str]:
+        """Triggers password reset or sets a temporary one-time password."""
+        # Calls GoTrue admin API /auth/v1/admin/users/{id}
+        pass
+
+    @staticmethod
+    async def archive_user(admin_id: str, target_user_id: str, reason: str) -> bool:
+        """Soft-deletes user, revokes active JWT sessions, and preserves anonymized vectors."""
+        pass
+
+    @staticmethod
+    async def purge_user(admin_id: str, target_user_id: str, reason: str) -> bool:
+        """Permanently deletes user, cascading across all personal tables (GDPR)."""
+        pass
 ```
 
 ---
@@ -616,6 +693,111 @@ For users who opt into de-identified research aggregation, data is transmitted a
 }
 ```
 
+### 8.3 Identity & State Persistence Layer (`supabase-opensrc-auth`)
+
+To achieve enterprise-grade security and cross-device personalization without violating the sub-cent / near-$0 COGS mandate, MigraineRelief integrates the open-source Supabase stack ([`SRP-alohamora/supabase-opensrc-auth`](https://github.com/SRP-alohamora/supabase-opensrc-auth)).
+
+#### 8.3.1 Architectural Flow & State Synchronization
+```mermaid
+flowchart LR
+    subgraph Client_App ["React / Vite Client"]
+        User_UI["Login / Register / Form Customizer"]
+        Admin_UI["Admin Console (/admin)"]
+        Local_Store["Local Encrypted Cache (IndexedDB)"]
+    end
+
+    subgraph Supabase_Auth_Engine ["Open-Source Auth Engine (GoTrue)"]
+        GoTrue["GoTrue JWT Service"]
+        Postgres_Auth["auth.users (Argon2id/Bcrypt)"]
+    end
+
+    subgraph Postgres_Persistence ["PostgreSQL + Row-Level Security"]
+        Profiles["public.user_profiles"]
+        Intakes["public.patient_custom_intakes"]
+        Audit["public.admin_audit_logs"]
+    end
+
+    subgraph Backend_Gateway ["FastAPI Backend Services"]
+        JWT_Verifier["SupabaseAuthGateway (RS256/HS256)"]
+        Admin_Service["AdminAccountService"]
+    end
+
+    User_UI -->|1. Authenticate (Email/Magic Link)| GoTrue
+    GoTrue --> Postgres_Auth
+    GoTrue -->|2. Signed JWT Token| User_UI
+
+    User_UI -->|3. Submit Custom Form (auth.uid)| Intakes
+    Intakes -->|RLS: auth.uid() = user_id| Local_Store
+
+    Admin_UI -->|4. Admin Requests (JWT)| JWT_Verifier
+    JWT_Verifier -->|5. Verify role == 'admin'| Admin_Service
+    Admin_Service -->|6. Reset / Archive / Purge| Profiles
+    Admin_Service -->|7. Append Event| Audit
+```
+
+#### 8.3.2 Relational Database Schema & Strict Row-Level Security (RLS)
+
+1. **User Profiles Table (`public.user_profiles`)**:
+   - Maps 1:1 to `auth.users(id)` from GoTrue.
+   - Stores role metadata (`user`, `admin`) and account status (`active`, `suspended`, `archived`).
+   - RLS policy enforces that non-admin callers can only `SELECT` their own profile record.
+
+2. **Customized Clinical Intake & Protocol Table (`public.patient_custom_intakes`)**:
+   - Stores user-customized baseline clinical inputs, visual aura selections, and personalized rescue protocol preferences.
+   - Schema:
+     ```sql
+     CREATE TABLE public.patient_custom_intakes (
+         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+         user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+         form_values JSONB NOT NULL DEFAULT '{}'::jsonb,
+         aura_patterns TEXT[] NOT NULL DEFAULT '{}',
+         customized_protocol JSONB NOT NULL DEFAULT '{}'::jsonb,
+         aura_progression_notes TEXT,
+         gst_timestamp TEXT,
+         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+         updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+         CONSTRAINT uq_patient_user UNIQUE (user_id)
+     );
+     ```
+   - RLS policy:
+     ```sql
+     CREATE POLICY "Users access own intake" ON public.patient_custom_intakes
+         FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+     CREATE POLICY "Admins inspect intakes" ON public.patient_custom_intakes
+         FOR SELECT USING (
+             EXISTS (SELECT 1 FROM public.user_profiles WHERE id = auth.uid() AND role = 'admin')
+         );
+     ```
+
+3. **Administrative Action Audit Log (`public.admin_audit_logs`)**:
+   - Append-only ledger recording all administrative actions (password reset issuance, account archival, permanent user purges).
+   - Schema:
+     ```sql
+     CREATE TABLE public.admin_audit_logs (
+         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+         admin_id UUID NOT NULL REFERENCES auth.users(id),
+         target_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+         action TEXT NOT NULL CHECK (action IN ('RESET_PASSWORD', 'CHANGE_STATUS', 'ARCHIVE_USER', 'DELETE_USER')),
+         details JSONB DEFAULT '{}'::jsonb,
+         timestamp_utc TIMESTAMPTZ NOT NULL DEFAULT NOW()
+     );
+     ```
+
+#### 8.3.3 Administrative Console Lifecycle Operations (`/admin`)
+
+* **Account Listing & Inspection**: Paginated query combining `auth.users`, `user_profiles`, and `patient_custom_intakes` to summarize account status, clinical configuration status, and MOH quotas.
+* **Password Reset Workflow**:
+  - `POST /admin/users/{user_id}/reset-password`
+  - Leverages GoTrue admin API (`/auth/v1/admin/generate_link` or direct password update).
+  - Admin can dispatch a single-use recovery email or generate an ephemeral reset link for direct patient handover during clinical onboarding.
+* **Account Archival (Soft Delete)**:
+  - Sets `user_profiles.status = 'archived'`.
+  - Calls GoTrue admin endpoint to invalidate all active refresh tokens and sessions.
+  - Retains de-identified outcome vectors in `intervention_response_graph` for longitudinal research if consent was granted.
+* **Account Purging (Hard Delete / GDPR Compliance)**:
+  - Deletes record from `auth.users`. Cascading foreign keys (`ON DELETE CASCADE`) immediately purge `user_profiles` and `patient_custom_intakes`.
+  - Zero residual identifying records remain in active operational databases.
+
 ---
 
 ## 9. Physical Directory Structure
@@ -626,7 +808,9 @@ Migraine/
 ├── README.md
 ├── PRD.md
 ├── system_design.md
+├── implementation.md                     # Engineering implementation guide
 ├── migrainerelief_strategy.md            # Git-ignored strategic blueprint
+├── netlify.toml                          # Netlify build configuration & SPA redirects
 ├── data/
 │   ├── clinical_400/                     # 400-case Kaggle Ranzeet013 clinical CSV
 │   ├── wearable_11879/                   # 11,879 patient-day dynamic behavioral dataset
@@ -678,13 +862,30 @@ Migraine/
 ├── app/                                  # FastAPI application & acute rescue engines
 │   ├── main.py
 │   ├── config.py
+│   ├── auth/                             # Supabase GoTrue JWT gateway & auth middleware
+│   │   ├── __init__.py
+│   │   └── supabase_gateway.py           # RS256/HS256 JWT verifier & RBAC guards
+│   ├── admin/                            # Administrative services & user lifecycle management
+│   │   ├── __init__.py
+│   │   └── account_service.py            # Password reset, account listing, archive, delete
+│   ├── api/v1/
+│   │   ├── endpoints_rescue.py
+│   │   ├── endpoints_patient.py
+│   │   └── endpoints_admin.py            # /admin/users, /admin/reset-password, /admin/archive
 │   ├── core/
 │   ├── engines/
 │   ├── knowledge/
 │   ├── skills/
 │   └── telemetry/
 ├── frontend/                             # React + Vite WebMD-inspired UI
-├── tests/                                # 68 automated unit & regression tests
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── LoginModal.tsx            # GoTrue Auth integration
+│   │   │   ├── AdminConsole.tsx          # Administrative account table & actions
+│   │   │   ├── UploadDataModal.tsx       # Custom intake submission & persistence
+│   │   │   └── ...
+│   │   └── ...
+├── tests/                                # Automated unit & regression tests
 └── deploy/                               # Docker & orchestration manifests
 ```
 
