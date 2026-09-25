@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Search, User, Sparkles, Menu, X, LogOut, ChevronRight, BookOpen, Database, GitBranch, Layers, Newspaper, Construction } from 'lucide-react';
+import { Search, User, Sparkles, Menu, X, LogOut, ChevronRight, BookOpen, Database, GitBranch, Layers, Newspaper, Construction, Pill } from 'lucide-react';
 
-export type NavRoute = '/' | '/news' | '/research' | '/datasets' | '/github' | '/classification' | '/under-construction' | '/login' | '/results';
+export type NavRoute = '/' | '/news' | '/medications' | '/research' | '/datasets' | '/github' | '/classification' | '/under-construction' | '/login' | '/results';
 
 interface WebMDNavbarProps {
   currentRoute: NavRoute;
@@ -97,7 +97,19 @@ export const WebMDNavbar: React.FC<WebMDNavbarProps> = ({
               News
             </button>
 
-            {/* 2. Research Papers */}
+            {/* 2. Medications (Next to News, Before Research Papers) */}
+            <button
+              onClick={() => handleRouteClick('/medications')}
+              id="nav-tab-medications"
+              className={`px-3.5 py-2 text-xs lg:text-sm font-bold whitespace-nowrap transition-colors rounded flex items-center gap-1.5 ${
+                currentRoute === '/medications' ? 'bg-[#003764] text-white shadow-inner' : 'hover:bg-[#004b87] text-white'
+              }`}
+            >
+              <Pill className="w-3.5 h-3.5 text-cyan-300" />
+              <span>Medications</span>
+            </button>
+
+            {/* 3. Research Papers */}
             <button
               onClick={() => handleRouteClick('/research')}
               className={`px-3.5 py-2 text-xs lg:text-sm font-bold whitespace-nowrap transition-colors rounded ${
@@ -218,6 +230,17 @@ export const WebMDNavbar: React.FC<WebMDNavbarProps> = ({
             }`}
           >
             <span className="flex items-center gap-2"><Newspaper className="w-4 h-4 text-cyan-300" /> News</span>
+            <ChevronRight className="w-4 h-4 opacity-50" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleRouteClick('/medications')}
+            className={`w-full text-left px-3 py-2.5 rounded font-bold text-sm flex items-center justify-between ${
+              currentRoute === '/medications' ? 'bg-[#005a9c]' : 'hover:bg-white/10'
+            }`}
+          >
+            <span className="flex items-center gap-2"><Pill className="w-4 h-4 text-cyan-300" /> Medications</span>
             <ChevronRight className="w-4 h-4 opacity-50" />
           </button>
 

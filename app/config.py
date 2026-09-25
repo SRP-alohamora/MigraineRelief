@@ -26,6 +26,8 @@ class Settings(BaseSettings):
         "http://localhost:8000",
     ]
     SECRET_KEY: str = Field(default="migrainerelief-local-dev-secret-key-32-chars-minimum")
+    SUPABASE_JWT_SECRET: str = Field(default="super-secret-jwt-token-with-at-least-32-characters-for-gotrue")
+    SUPABASE_URL: str = Field(default="https://localhost:8000")
 
     # Knowledge Layer & Context
     OPENVIKING_ROOT_URI: str = "viking://"

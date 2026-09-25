@@ -11,6 +11,8 @@ import {
   ClassificationTab,
   UnderConstructionTab,
 } from './components/NavigationSections';
+import { MedicationKnowledgeTile } from './components/MedicationKnowledgeTile';
+import { MedicationsTab } from './components/MedicationsTab';
 import { LoginModal } from './components/LoginModal';
 import { ShieldCheck, ChevronRight, Zap, Clock, Lock, ArrowRight, Sparkles } from 'lucide-react';
 
@@ -18,7 +20,7 @@ export const App: React.FC = () => {
   // Client-Side URL Route Management
   const [currentRoute, setCurrentRoute] = useState<NavRoute>(() => {
     const p = window.location.pathname;
-    if (['/news', '/research', '/datasets', '/github', '/classification', '/under-construction', '/login', '/results'].includes(p)) {
+    if (['/news', '/medications', '/research', '/datasets', '/github', '/classification', '/under-construction', '/login', '/results'].includes(p)) {
       return p as NavRoute;
     }
     return '/';
@@ -71,7 +73,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     const handlePopState = () => {
       const p = window.location.pathname;
-      if (['/news', '/research', '/datasets', '/github', '/classification', '/under-construction', '/login', '/results'].includes(p)) {
+      if (['/news', '/medications', '/research', '/datasets', '/github', '/classification', '/under-construction', '/login', '/results'].includes(p)) {
         setCurrentRoute(p as NavRoute);
       } else {
         setCurrentRoute('/');
@@ -130,6 +132,8 @@ export const App: React.FC = () => {
           <span className="text-slate-800 font-bold capitalize">
             {currentRoute === '/'
               ? 'Research & Clinical Trials'
+              : currentRoute === '/medications'
+              ? 'Medications & Treatments'
               : currentRoute === '/research'
               ? 'Research Papers'
               : currentRoute === '/datasets'
@@ -227,6 +231,9 @@ export const App: React.FC = () => {
               </div>
             </section>
 
+            {/* Comprehensive Migraine Medications & Neuromodulation Feature Tile */}
+            <MedicationKnowledgeTile onLearnMore={() => navigateTo('/medications')} />
+
             <FeaturedResearchSection
               onOpenUploadModal={() => setIsUploadModalOpen(true)}
             />
@@ -240,6 +247,9 @@ export const App: React.FC = () => {
 
         {/* Route: News */}
         {currentRoute === '/news' && <NewsTab />}
+
+        {/* Route: Medications (Next to News, Before Research Papers) */}
+        {currentRoute === '/medications' && <MedicationsTab />}
 
         {/* Route: Research Papers */}
         {currentRoute === '/research' && <ResearchPapersTab />}
@@ -288,6 +298,11 @@ export const App: React.FC = () => {
                 <li>
                   <button onClick={() => navigateTo('/news')} className="hover:text-[#005a9c]">
                     Latest News
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigateTo('/medications')} className="hover:text-[#005a9c]">
+                    Medications &amp; Therapies
                   </button>
                 </li>
                 <li>

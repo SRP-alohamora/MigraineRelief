@@ -4,14 +4,17 @@ from datetime import datetime, timezone, timedelta
 import json
 import os
 import re
-from typing import Any, Dict, Optional
-from fastapi import APIRouter
+from typing import Any, Dict, List, Optional
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
+from app.auth.supabase_gateway import get_current_user, get_optional_current_user
+from app.admin.account_service import AdminAccountService
 
 router = APIRouter(prefix="/patient", tags=["Patient Data & RAG Ingestion"])
 
 # GST timezone is UTC+4
 GST_TIMEZONE = timezone(timedelta(hours=4))
+
 
 
 class PatientDataPayload(BaseModel):
@@ -101,9 +104,22 @@ def classify_migraine_subtype(data: PatientDataPayload) -> tuple[str, int]:
     return "Other", 85
 
 
+class PatientProfilePayload(BaseModel):
+    """Authenticated patient clinical profile and customized intake payload."""
+
+    form_values: Dict[str, Any] = Field(default_factory=dict, description="24 Kaggle diagnostic features")
+    aura_patterns: List[str] = Field(default_factory=list, description="Specific aura phenotypes")
+    customized_protocol: Optional[Dict[str, Any]] = Field(default=None, description="Tailored acute rescue protocol")
+    aura_progression_notes: Optional[str] = Field(default="", description="Patient clinical aura notes")
+    gst_timestamp: Optional[str] = Field(default=None, description="GST formatted timestamp")
+
+
 @router.post("/save-data", response_model=SavePatientDataResponse)
-async def save_patient_data(payload: PatientDataPayload) -> SavePatientDataResponse:
-    """Saves customer data file formatted as `<loginname>_<timestamp in GST>.json` and feeds RAG."""
+async def save_patient_data(
+    payload: PatientDataPayload,
+    current_user: Optional[Dict[str, Any]] = Depends(get_optional_current_user),
+) -> SavePatientDataResponse:
+    """Saves customer data file formatted as `<loginname>_<timestamp in GST>.json`, feeds RAG, and syncs to account."""
     # Compute current date and time in GST format (UTC+4)
     now_gst = datetime.now(GST_TIMEZONE)
     date_str = now_gst.strftime("%Y%m%d")
@@ -212,6 +228,38 @@ async def save_patient_data(payload: PatientDataPayload) -> SavePatientDataRespo
     with open(rag_file_path, "w", encoding="utf-8") as f:
         json.dump(record_dict, f, indent=2)
 
+    # If user is authenticated or has a linked account, persist custom intake to their account
+    account_user_id = current_user.get("sub") if current_user else None
+    account_email = current_user.get("email") if current_user else None
+
+    # Fallback to matching login_name with known profile
+    if not account_user_id:
+        for uid, prof in AdminAccountService._profiles.items():
+            if prof.get("email", "").lower() == payload.login_name.lower().strip() or uid == payload.login_name.strip():
+                account_user_id = uid
+                account_email = prof.get("email")
+                break
+
+    if account_user_id:
+        auras = []
+        if payload.visual > 0:
+            auras.append(f"visual_aura_{payload.visual}")
+        if payload.sensory > 0:
+            auras.append(f"sensory_aura_{payload.sensory}")
+        AdminAccountService.save_custom_intake(
+            user_id=account_user_id,
+            email=account_email or payload.login_name,
+            form_values=payload.model_dump(),
+            aura_patterns=auras,
+            customized_protocol={
+                "recommended_route": recommended_route,
+                "recommended_molecule": recommended_molecule,
+                "pre_allodynic_window_minutes": pre_allodynic_window,
+            },
+            aura_progression_notes=f"Subtype: {predicted_type} (Confidence {confidence}%)",
+            gst_timestamp=full_gst_display,
+        )
+
     return SavePatientDataResponse(
         status="SUCCESS_SAVED_AND_ANALYZED",
         filename=filename,
@@ -226,3 +274,42 @@ async def save_patient_data(payload: PatientDataPayload) -> SavePatientDataRespo
         rag_memory_indexed=True,
         saved_filepath=os.path.relpath(file_path, os.getcwd()),
     )
+
+
+@router.get("/profile", summary="Get authenticated patient custom intake profile")
+async def get_patient_profile(current_user: Dict[str, Any] = Depends(get_current_user)):
+    """Retrieves custom clinical intake and rescue protocol preferences for authenticated user."""
+    user_id = current_user["sub"]
+    intake = AdminAccountService.get_custom_intake(user_id)
+    return {
+        "configured": intake is not None,
+        "user_id": user_id,
+        "email": current_user.get("email"),
+        "role": current_user.get("role", "user"),
+        "intake": intake,
+    }
+
+
+@router.post("/profile", summary="Save authenticated patient custom intake profile")
+async def save_patient_profile(
+    profile_data: PatientProfilePayload,
+    current_user: Dict[str, Any] = Depends(get_current_user),
+):
+    """Saves customized clinical intake, aura phenotypes, and rescue protocol to user's account."""
+    user_id = current_user["sub"]
+    email = current_user.get("email", "patient@migrainerelief.ai")
+    saved = AdminAccountService.save_custom_intake(
+        user_id=user_id,
+        email=email,
+        form_values=profile_data.form_values,
+        aura_patterns=profile_data.aura_patterns,
+        customized_protocol=profile_data.customized_protocol,
+        aura_progression_notes=profile_data.aura_progression_notes,
+        gst_timestamp=profile_data.gst_timestamp,
+    )
+    return {
+        "status": "SUCCESS_PROFILE_SAVED",
+        "user_id": user_id,
+        "profile": saved,
+    }
+

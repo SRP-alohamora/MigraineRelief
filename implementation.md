@@ -95,8 +95,12 @@ Migraine/
 │   ├── package.json
 │   ├── vite.config.ts
 │   └── src/
-│       ├── App.tsx                       # Main shell with dark-mode photophobia palette
+│       ├── App.tsx                       # Main shell with dark-mode photophobia palette & /medications routing
 │       ├── components/
+│       │   ├── WebMDNavbar.tsx           # Navigation with strict tab ordering (News -> Medications -> Research)
+│       │   ├── MedicationKnowledgeTile.tsx # Homepage interactive tile with 4 pillars & Learn More CTA
+│       │   ├── MedicationsTab.tsx        # Comprehensive Medications & Neuromodulation Therapy catalog
+│       │   ├── FeaturedResearchSection.tsx# Landmark Chiang/Burstein research stories
 │       │   ├── LoginModal.tsx            # GoTrue Auth integration (email/password/magic link)
 │       │   ├── AdminConsole.tsx          # Administrative user directory & action drawer
 │       │   ├── UploadDataModal.tsx       # Custom intake submission & persistence
@@ -822,3 +826,88 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--worker
 docker build -t migrainerelief:latest .
 docker run -p 8000:8000 --name migrainerelief-core migrainerelief:latest
 ```
+
+---
+
+## 14. Frontend Medication & Neuromodulation Therapy Implementation Specification (`/medications`)
+
+### 14.1 Component Architecture & Routing
+The Medication & Neuromodulation Therapy Intelligence system is implemented across two synchronized React components integrated into the client-side routing architecture:
+
+```
+[ App.tsx ]
+   │
+   ├── [ WebMDNavbar.tsx ]
+   │      └── Strict Tab Ordering:
+   │          Home ('/') → News ('/news') → Medications ('/medications') → Research Papers ('/research') → ...
+   │
+   ├── Route: '/'
+   │      └── [ MedicationKnowledgeTile.tsx ]
+   │             ├── 4 Interactive Clinical Pillars:
+   │             │   1. Prescription (Rx) & CGRP (Zavzpret, Nurtec, Qulipta, Ubrelvy, Reyvow)
+   │             │   2. OTC Analgesics & Supplements (NSAIDs, Excedrin, Magnesium, B2, CoQ10)
+   │             │   3. Medical Devices (FDA-Approved, Pending, Investigational)
+   │             │   4. Pipeline & Acupressure (Lu AG09222 PACAP, LI4, PC6, GB20)
+   │             └── Primary Action: onLearnMore() → navigateTo('/medications')
+   │
+   └── Route: '/medications'
+          └── [ MedicationsTab.tsx ]
+                 ├── Search Engine: Real-time query matching across names, brands, indications, and mechanisms
+                 ├── Category Filtering: All, Prescription, CGRP & Ditans, Devices, OTC, Integrative, Pipeline
+                 ├── Goal Filtering: All, Acute Rescue, Daily Preventive, Emergency Procedures
+                 ├── Device Clearance Faceting: FDA-Approved vs. Approval Pending vs. Not Applied / CE
+                 ├── Interactive Clinical Modal: Mechanism of Action, Dosing/Session, Contraindications, Citations
+                 └── External Deep-Links: Direct links to manufacturer domains and peer-reviewed journals
+```
+
+### 14.2 Clinical Dataset Schema
+The catalog is strictly typed via TypeScript interface `TreatmentItem`:
+```ts
+export interface TreatmentItem {
+  id: string;
+  name: string;
+  brandName?: string;
+  category: 'cgrp' | 'triptan' | 'ditan' | 'otc' | 'supplement' | 'device' | 'procedure' | 'pipeline';
+  goal: 'acute' | 'preventive' | 'both' | 'emergency';
+  formulation: string;
+  speedOfOnset: string;
+  mechanism: string;
+  fdaStatus: 'FDA Approved' | 'FDA Approval Pending' | 'Investigational / Not Applied' | 'Dietary Supplement' | 'Clinical Procedure';
+  deviceStatus?: 'fda-approved' | 'approval-pending' | 'not-applied';
+  keyBenefits: string[];
+  contraindicationsOrWarnings: string;
+  officialUrl?: string;
+  evidenceCitation: string;
+  isBreakthrough?: boolean;
+}
+```
+
+### 14.3 Regulatory Device Registry & Official Website Links
+Devices are cataloged into three explicit regulatory tiers with direct outbound citations:
+1. **FDA Approved / Cleared**:
+   - **Cefaly Dual (e-TNS)**: External Trigeminal Nerve Stimulation (`https://www.cefaly.com`)
+   - **Nerivio (REN)**: Remote Electrical Neuromodulation arm patch for ages 8+ (`https://nerivio.com`)
+   - **gammaCore Sapphire (nVNS)**: Non-invasive Vagus Nerve Stimulation handheld (`https://www.gammacore.com`)
+   - **Relivion MG (e-TNS + e-ONS)**: Dual Occipital and Trigeminal stimulation headset (`https://www.relivion.com`)
+   - **SAVI Dual / SpringTMS (sTMS)**: Single-pulse Transcranial Magnetic Stimulation (`https://www.eneura.com`)
+2. **FDA Approval Pending / De Novo Review**:
+   - **Adaptive Closed-Loop Vagal Headsets**: Real-time bio-synchronous taVNS with PPG sensor integration
+   - **Pulsed Micro-RF Occipital Systems**: High-frequency transcutaneous generators
+3. **Not Applied Yet / Investigational / Consumer Wellness**:
+   - **Transcranial Direct Current Stimulation (tDCS)**: CE-marked in EU; investigational in the US
+   - **Photobiomodulation / Narrowband Green Light (Allay Lamp)**: 525 nm wavelength illumination (`https://allaylamp.com`)
+   - **Consumer taVNS Auricular Clips**: Over-the-counter relaxation accessories
+
+### 14.4 Integrative & Acupressure Protocol Schema
+Provides structured acupressure mapping with anatomical precision and pregnancy contraindications:
+- **LI4 (Hegu)**: Webbing of thumb and index finger (contraindicated during pregnancy)
+- **PC6 (Neiguan)**: Inner forearm, 2 thumb-widths from wrist crease (antiemetic gold standard)
+- **GB20 (Fengchi)**: Suboccipital skull base hollows (cervicogenic tension and allodynia)
+- **Yin Tang**: Midpoint between eyebrows (sympathetic nervous calming)
+
+### 14.5 Verification & Test Plan
+- **Route Navigation Integrity**: Verify `/medications` renders in URL without full page reload.
+- **Tab Order Invariant**: Verify desktop and mobile navigation displays: Home → News → Medications → Research Papers.
+- **Search Latency**: Real-time filtering executes in $<10\text{ms}$ on client-side state.
+- **Responsive Viewports**: Tested at 375px (mobile drawer with Pill icon), 768px (tablet), and 1280px+ (desktop header).
+

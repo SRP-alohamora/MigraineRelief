@@ -597,12 +597,117 @@ CREATE POLICY "Admins full access audit logs" ON public.admin_audit_logs
 
 ---
 
-## 12. Regulatory Posture & Safety Risk Management
+---
 
-* **FDA Software as a Medical Device (SaMD) Classification**:
-  - MigraineRelief operates under **FDA Enforcement Discretion for Clinical Decision Support (CDS) Software** and General Wellness guidelines.
-  - The software does not unilaterally prescribe drugs; it organizes, visualizes, and optimizes the timing of *already-prescribed* patient medications according to FDA package inserts and published clinical protocols.
-* **Liability Safeguards**:
-  - The deterministic SNOOP4 gate screens every interaction for life-threatening secondary headache etiologies.
-  - Transparent epistemic tags ensure patients and clinicians understand the scientific certainty of every insight.
-  - Mandatory clinical onboarding disclaimer: *"MigraineRelief is an educational precision decision copilot designed to assist patient self-management and physician shared decision-making. Always consult your neurologist before altering medical regimens."*
+## 13. Comprehensive Medication & Neuromodulation Therapy Intelligence (`/medications`)
+
+### 13.1 Feature Overview & Architectural Placement
+To empower migraineurs and clinicians with evidence-based, up-to-date therapeutic knowledge, MigraineRelief provides a dedicated **Medication & Neuromodulation Therapy Intelligence Engine**.
+
+* **Home Page Feature Tile**: A prominent, interactive tile on the main home page titled *"Comprehensive Migraine Medication & Neuromodulation Therapy Guide"* featuring 4 clinical pillars (Prescription & CGRP, OTC Analgesics & Supplements, Neuromodulation Devices, and Experimental Pipeline) with an authoritative *"Learn More & Open Medications Tab"* CTA.
+* **Navigation Placement**: Positioned strictly next to **News** and before **Research Papers** in the primary navigation header and mobile navigation drawer under the route `/medications`.
+* **Clinical Knowledge Sources**: Directly references and synthesizes verified 2026 neurological guides, including:
+  - Advanced Spine & Pain (April 2026): *7 Best Migraine Medications: A Complete Guide* ([Reference](https://advancedspineandpain.com/2026/04/26/best-migraine-medications/))
+  - Los Altos Neurology (August 2026): *Migraine Treatment: CGRP Therapies, Gepants, Botox, and Neuromodulation* ([Reference](https://losaltosneurology.com/2026/08/09/migraine-treatment-in-2026-cgrp-prevention-new-therapies/))
+  - Updated 2026 American Headache Society (AHS) Emergency Department Guidelines (Robblee et al.)
+  - International Headache Society (IHS) Evidence-Based Guidelines on Non-Invasive Neuromodulation Devices (Cephalalgia 2025/2026).
+
+---
+
+### 13.2 Detailed Therapeutic Taxonomy & Requirements
+
+```
++--------------------------------------------------------------------------------------------------------------------------+
+|                                    MIGRAINERELIEF THERAPEUTIC TAXONOMY (2026)                                            |
++--------------------------+------------------------------+---------------------------+------------------------------------+
+| Category                 | Formulation / Delivery       | Mechanism / Target        | Clinical Hallmark & Safety         |
++--------------------------+------------------------------+---------------------------+------------------------------------+
+| Breakthrough CGRP        | • Nasal Spray (Zavzpret 10mg)| • CGRP Receptor Antagonist| • Bypasses acute gastric stasis    |
+| Inhibitors (Gepants)     | • ODT (Nurtec 75mg)          | • CGRP Ligand Neutralizer | • Zero vasoconstriction (safe CAD) |
+|                          | • Oral (Ubrelvy, Qulipta)    |                           | • Free of MOH rebound              |
++--------------------------+------------------------------+---------------------------+------------------------------------+
+| CGRP Biologics (mAbs)    | • SC (Aimovig, Ajovy,        | • CGRP Receptor or Ligand | • Monthly or quarterly prophylaxis |
+|                          |   Emgality) / IV (Vyepti)    |   monoclonal antibodies   | • Ajovy pediatric clearance (6–17) |
++--------------------------+------------------------------+---------------------------+------------------------------------+
+| Ditans (5-HT1F)          | • Oral (Reyvow 50/100mg)     | • Selective 5-HT1F Agonist| • Non-vasoconstrictive; 8h driving |
+|                          |                              |   (CNS-penetrant)         |   restriction mandatory            |
++--------------------------+------------------------------+---------------------------+------------------------------------+
+| Triptans (5-HT1B/1D)     | • Oral, Nasal, SC Injection  | • 5-HT1B/1D Vasoconstrictor| • Gold standard pre-allodynia      |
+| (7 FDA-Approved)         | • + Naproxen (Treximet)      |   & Trigeminal Inhibitor  | • Eletriptan 78% real-world relief |
++--------------------------+------------------------------+---------------------------+------------------------------------+
+| Emergency Procedures     | • IV Prochlorperazine 10mg   | • Central D2 Antagonist   | • AHS Level A "Must Offer"         |
+|                          | • Greater Occipital Nerve Blk| • C1-C3 Afferent Blockade | • Level A "Must NOT Offer": Opioids|
++--------------------------+------------------------------+---------------------------+------------------------------------+
+| Over-The-Counter (OTC)   | • Excedrin Migraine          | • COX-1/2 + Central +     | • Strict MOH limits:               |
+| & Supplements            | • Ibuprofen / Naproxen       |   caffeine gut enhancement|   ≤9 d/mo combo, ≤14 d/mo simple   |
+|                          | • Magnesium, B2, CoQ10       | • NMDA / Mitochondrial    | • Level B evidence (AHS/EFNS)      |
++--------------------------+------------------------------+---------------------------+------------------------------------+
+| Medical Devices          | • e-TNS (Cefaly Dual)        | • Supraorbital V1 Stim    | • FDA Approved: OTC Cefaly,        |
+| (Neuromodulation)        | • REN (Nerivio Arm Patch)    | • Conditioned Pain Mod (CPM)| Nerivio (8+), gammaCore, Relivion|
+|                          | • nVNS (gammaCore Neck Unit) | • Vagal Parasympathetic   | • Pending: Closed-loop bio-sync    |
+|                          | • sTMS (SAVI Dual Occipital) | • CSD Disruption (~0.9 T) | • Investigational: Allay Lamp 525nm|
++--------------------------+------------------------------+---------------------------+------------------------------------+
+| Pipeline Experimental    | • Lu AG09222 (Bocunebart)    | • Anti-PACAP Monoclonal Ab| • Phase 2b PROCEED trial (2026):   |
+|                          | • Kv7.2/7.3 Channel Openers  | • Neuronal dampeners      |   -4.24d reduction (p < 0.05)      |
++--------------------------+------------------------------+---------------------------+------------------------------------+
+```
+
+#### 13.2.1 Prescription Medications (Rx)
+1. **Calcitonin Gene-Related Peptide (CGRP) Inhibitors**:
+   - **Zavegepant (Zavzpret)**: First and only intranasal small-molecule CGRP antagonist (10 mg single-dose nasal spray). Fast-acting (15–30 min onset), bypassing gastric stasis and nausea.
+   - **Rimegepant (Nurtec ODT)**: 75 mg orally disintegrating tablet with dual clearance for acute rescue and every-other-day episodic prevention.
+   - **Ubrogepant (Ubrelvy)**: 50 mg / 100 mg oral tablets for acute rescue. Safe in cardiovascular disease.
+   - **Atogepant (Qulipta)**: 10 mg / 30 mg / 60 mg once-daily oral tablet for episodic and chronic prevention.
+   - **CGRP Monoclonal Antibodies (Biologics)**: Erenumab (Aimovig 70/140mg monthly SC), Fremanezumab (Ajovy 225mg monthly or 675mg quarterly SC, featuring expanded August 2025 FDA approval and 2026 Phase 3 pediatric evidence for ages 6–17 weighing ≥45 kg), Galcanezumab (Emgality 120mg monthly SC, also approved for cluster headache), and Eptinezumab (Vyepti 100/300mg IV infusion quarterly).
+2. **Ditans**:
+   - **Lasmiditan (Reyvow)**: 50 mg / 100 mg oral selective 5-HT1F receptor agonist without 5-HT1B vasoconstrictive properties; indicated for patients with cardiovascular contraindications. Requires an 8-hour driving advisory due to CNS sedation.
+3. **Triptans (7 FDA-Approved Formulations)**:
+   - Sumatriptan, Eletriptan (Relpax, 78% real-world effectiveness), Rizatriptan (Maxalt-MLT), Zolmitriptan (Zomig nasal/oral), Naratriptan (Amerge), Frovatriptan (Frova), and Almotriptan (Axert).
+   - Fixed-dose combination: Sumatriptan 85 mg + Naproxen sodium 500 mg (Treximet) for synergistic dual-pathway relief.
+4. **Emergency Department & Procedural Standards (2026 AHS Update)**:
+   - Level A ("Must Offer"): IV Prochlorperazine (10 mg) and Greater Occipital Nerve Blocks (bupivacaine/lidocaine).
+   - Level A ("Must NOT Offer"): IV hydromorphone and IV opioids due to risk of chronification and rebound headache.
+
+#### 13.2.2 Over-The-Counter (OTC) Analgesics & Supplements
+1. **Analgesics**:
+   - Ibuprofen (Advil, Motrin), Naproxen sodium (Aleve), and Excedrin Migraine (Aspirin 250 mg + Acetaminophen 250 mg + Caffeine 65 mg).
+   - **Medication Overuse Headache (MOH) Guard**: Hard limit enforced at ≤9 days/month for combination analgesics and ≤14 days/month for simple NSAIDs.
+2. **Evidence-Based Dietary Supplements (AHS / EFNS Recommendations)**:
+   - **Magnesium (Glycinate or Citrate)**: 400–600 mg/day (NMDA block & CSD suppression).
+   - **Riboflavin (Vitamin B2)**: 400 mg/day (mitochondrial electron transport cofactor).
+   - **Coenzyme Q10 (CoQ10)**: 150–300 mg/day (cellular bioenergetics).
+   - **Feverfew (*Tanacetum parthenium*)**: Standardized parthenolide extract.
+   - **Butterbur (*Petasites hybridus*)**: Must specify certified pyrrolizidine alkaloid-free (PA-free Petadolex) to prevent hepatotoxicity.
+   - **Melatonin**: 3 mg nightly (circadian hypothalamic pacemaking).
+3. **Lifestyle Medicine & Acupressure Protocol**:
+   - Circadian sleep regularity, hydration (2.5–3.0 L/day), and scheduled non-skipping meals.
+   - Interactive Acupressure Guide:
+     - **LI4 (Hegu)**: Webbing between thumb and index finger (cranial analgesia; strictly avoid during pregnancy).
+     - **PC6 (Neiguan)**: Inner forearm, 2 thumb-widths proximal to wrist crease (acute nausea and vestibular stability).
+     - **GB20 (Fengchi)**: Suboccipital skull base hollows (cervicogenic tension and occipital throbbing).
+     - **Yin Tang**: Midpoint between eyebrows (sympathetic calming and frontal pressure).
+   - Cochrane-reviewed Acupuncture evidence (22 trials, 4,985 patients) demonstrating parity with pharmacological prophylaxis with fewer adverse events.
+
+#### 13.2.3 Medical Devices & Neuromodulation (FDA Status Categorization)
+1. **FDA Approved / Cleared (With Official Website Links)**:
+   - **Cefaly Dual (e-TNS)**: External Trigeminal Nerve Stimulation forehead band. Acute (60 min) and Preventive (20 min) clearance. Over-the-counter access. Official: [cefaly.com](https://www.cefaly.com).
+   - **Nerivio (REN)**: Remote Electrical Neuromodulation wearable arm patch controlled via mobile app. Cleared for acute and preventive use in patients aged 8+. Official: [nerivio.com](https://nerivio.com).
+   - **gammaCore Sapphire (nVNS)**: Non-invasive Vagus Nerve Stimulation handheld neck device for acute and preventive treatment of migraine and cluster headache. Official: [gammacore.com](https://www.gammacore.com).
+   - **Relivion MG (e-TNS + e-ONS)**: Combined Occipital and Trigeminal nerve stimulation headset. Official: [relivion.com](https://www.relivion.com).
+   - **SAVI Dual / SpringTMS (sTMS)**: Single-pulse Transcranial Magnetic Stimulation (~0.9 T) for CSD disruption. Official: [eneura.com](https://www.eneura.com).
+2. **FDA Approval Pending / De Novo Review**:
+   - **Adaptive Closed-Loop Vagal Headsets**: Micro-taVNS synchronized to heart-rate variability and autonomic biosensors, currently undergoing FDA 510(k)/De Novo review.
+   - **Pulsed Micro-RF Occipital Systems**: External pulse generators under pivotal investigation.
+3. **Not Applied Yet / Investigational / Consumer Wellness**:
+   - **Transcranial Direct Current Stimulation (tDCS)**: CE-marked in Europe; investigational in the United States.
+   - **Photobiomodulation / Narrowband Green Light (Allay Lamp)**: ~525 nm wavelength illumination discovered by Dr. Rami Burstein at Harvard Medical School to avoid triggering retinal-thalamic pain pathways. Official: [allaylamp.com](https://allaylamp.com).
+   - **Consumer taVNS Auricular Clips**: General relaxation devices without FDA migraine clearance.
+
+#### 13.2.4 Experimental Pipeline Breakthroughs
+1. **PACAP (Pituitary Adenylate Cyclase-Activating Polypeptide) Pathway**:
+   - **Bocunebart (Lu AG09222)**: Humanized monoclonal antibody targeting PACAP. In the June 2026 Phase 2b PROCEED trial results reported by Lundbeck, IV Dose-A achieved a statistically significant reduction in monthly migraine days (-4.24 days vs -2.86 days placebo, adjusted difference -1.38 days, p < 0.05). Represents the leading therapeutic mechanism for patients non-responsive to CGRP therapies.
+2. **Kv7.2/7.3 Potassium Channel Modulators**:
+   - Neuronal membrane hyperpolarizers dampening trigeminal ganglionic firing and cortical spreading depression.
+3. **Dual Orexin Receptor Antagonists (DORAs)**:
+   - Hypothalamic circuit regulators synchronizing sleep-pain gating networks.
+
