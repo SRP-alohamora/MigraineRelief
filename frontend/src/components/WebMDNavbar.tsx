@@ -10,6 +10,7 @@ interface WebMDNavbarProps {
   onOpenLogin: () => void;
   isLoggedIn: boolean;
   username: string;
+  userRole?: string;
   onLogout: () => void;
 }
 
@@ -20,6 +21,7 @@ export const WebMDNavbar: React.FC<WebMDNavbarProps> = ({
   onOpenLogin,
   isLoggedIn,
   username,
+  userRole = 'user',
   onLogout,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -181,10 +183,28 @@ export const WebMDNavbar: React.FC<WebMDNavbarProps> = ({
           <div className="py-1">
             {isLoggedIn ? (
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-blue-100 flex items-center gap-1">
-                  <User className="w-3.5 h-3.5 text-cyan-300" />
-                  {username}
-                </span>
+                {/* Clickable human symbol & username opens Admin Settings when admin or Profile when user */}
+                <button
+                  type="button"
+                  onClick={onOpenLogin}
+                  title={userRole === 'admin' ? "Admin Settings & User Directory (Click human symbol)" : "Account Profile"}
+                  className={`text-xs font-semibold px-2.5 py-1 rounded flex items-center gap-1.5 transition-all cursor-pointer ${
+                    userRole === 'admin'
+                      ? 'bg-amber-400/20 text-amber-200 border border-amber-400/40 hover:bg-amber-400/30 shadow-xs'
+                      : 'text-blue-100 hover:text-white hover:bg-white/10'
+                  }`}
+                  aria-label={userRole === 'admin' ? "Open Admin Settings" : "Open Profile"}
+                >
+                  <span className="p-0.5 rounded-full hover:bg-white/20 transition-transform hover:scale-110" title="Click human symbol for Admin Settings">
+                    <User className={`w-3.5 h-3.5 ${userRole === 'admin' ? 'text-amber-300' : 'text-cyan-300'}`} />
+                  </span>
+                  <span>{username}</span>
+                  {userRole === 'admin' && (
+                    <span className="text-[10px] font-black uppercase tracking-wider bg-amber-400 text-slate-900 px-1.5 py-0.5 rounded font-mono shadow-xs">
+                      Admin Settings
+                    </span>
+                  )}
+                </button>
                 <button
                   type="button"
                   onClick={onLogout}
@@ -315,9 +335,27 @@ export const WebMDNavbar: React.FC<WebMDNavbarProps> = ({
           <div className="pt-3 mt-3 border-t border-blue-800">
             {isLoggedIn ? (
               <div className="flex items-center justify-between px-2">
-                <span className="text-xs text-slate-300 flex items-center gap-1.5">
-                  <User className="w-3.5 h-3.5 text-cyan-300" /> {username}
-                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onOpenLogin();
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`text-xs flex items-center gap-1.5 px-2 py-1 rounded transition-colors text-left ${
+                    userRole === 'admin'
+                      ? 'bg-amber-400/20 text-amber-200 border border-amber-400/30'
+                      : 'text-slate-200 hover:text-white'
+                  }`}
+                  title={userRole === 'admin' ? "Admin Settings" : "Account Profile"}
+                >
+                  <User className={`w-3.5 h-3.5 ${userRole === 'admin' ? 'text-amber-300' : 'text-cyan-300'}`} />
+                  <span>{username}</span>
+                  {userRole === 'admin' && (
+                    <span className="text-[9px] font-bold uppercase bg-amber-400 text-slate-900 px-1.5 py-0.5 rounded ml-1">
+                      Admin Settings
+                    </span>
+                  )}
+                </button>
                 <button
                   type="button"
                   onClick={onLogout}

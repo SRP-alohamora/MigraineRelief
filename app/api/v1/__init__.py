@@ -6,8 +6,10 @@ from app.api.v1.endpoints_sandbox import router as sandbox_router
 from app.api.v1.endpoints_outcome import router as outcome_router
 from app.api.v1.endpoints_patient import router as patient_router
 from app.api.v1.endpoints_admin import router as admin_router
+from app.api.v1.endpoints_auth import router as auth_router
 
 api_v1_router = APIRouter()
+api_v1_router.include_router(auth_router)
 api_v1_router.include_router(rescue_router)
 api_v1_router.include_router(sandbox_router)
 api_v1_router.include_router(outcome_router)

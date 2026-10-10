@@ -911,3 +911,53 @@ Provides structured acupressure mapping with anatomical precision and pregnancy 
 - **Search Latency**: Real-time filtering executes in $<10\text{ms}$ on client-side state.
 - **Responsive Viewports**: Tested at 375px (mobile drawer with Pill icon), 768px (tablet), and 1280px+ (desktop header).
 
+---
+
+## 15. Protected Personal (PP) Warning Gate & Open-Source Account Authentication Flow (`SRP-alohamora/supabase-opensrc-auth`)
+
+### 15.1 Architectural Overview & User Flow
+When the user clicks **"Analyze My Migraine Patterns"** (from the homepage hero or featured research sections), the system opens a unified 3-step modal workflow designed to guarantee Zero-PII compliance and frictionless identity persistence:
+
+```mermaid
+flowchart TD
+    Trigger["User clicks 'Analyze My Migraine Patterns'"] --> Step1["Step 1: PP Warning Gate (privacy_gate)"]
+    Step1 -->|Check acknowledgment & Continue| Step2["Step 2: Open-Source Auth Prompt (auth_prompt)"]
+    Step2 -->|Sign In / Sign Up / Magic Link / Anonymous| Step3["Step 3: Clinical Evaluation Form (questionnaire)"]
+    Step3 -->|Run Analysis| Results["Save GST File & Navigate to /results"]
+```
+
+### 15.2 Step 1: Protected Personal (PP) Information Warning Gate (`privacy_gate`)
+- **Warning Title**: *"Warning: Do Not Enter Protected Personal (PP) Information"*
+- **Compliance Scope**: Clinical Research Protocol, HIPAA Safe Harbor, and GDPR de-identification rules.
+- **Explicit Prohibitions**: Prohibits legal names, nicknames, emails, phone numbers, street addresses, exact DOB, Social Security Numbers (SSN), Medical Record Numbers (MRN), or health insurance identifiers.
+- **Data Scope**: Explains that Migraine Relief analyzes structured physiological features only (duration, frequency, intensity, unilateral location, visual aura patterns, nausea, photophobia, phonophobia).
+- **Mandatory User Acknowledgment**: Checkbox required to confirm user understanding before advancing.
+
+### 15.3 Step 2: Open-Source Account Authentication Gate (`auth_prompt`)
+- **Authentication Stack**: Integrated with [`SRP-alohamora/supabase-opensrc-auth`](https://github.com/SRP-alohamora/supabase-opensrc-auth) leveraging GoTrue JWT token semantics and PostgreSQL Row-Level Security (RLS).
+- **Active Session Recognition**: If the user is already authenticated, displays an active session banner with a primary button to proceed immediately as the current user, or an option to switch accounts.
+- **Authentication Modes**:
+  1. **Sign In**: Email/Clinical ID + Password with GoTrue JWT generation.
+  2. **Create Account**: Email + Password (min. 6 characters) + Persona selection (Patient, Adolescent Episodic, Chronic Refractory, Investigator) + pseudonymous display handle.
+  3. **Magic Link**: Passwordless session link generation and immediate cryptographic login.
+  4. **Anonymous Guest**: Provisions an isolated ephemeral session (`anonymousPatient_<hex>`) with client-side fallback for emergency zero-PII analysis without credential storage.
+  5. **Quick Benchmark Personas**: One-click authentication as pre-seeded clinical personas:
+     - **Alexa Rivera** (`alexa@school.edu`): Adolescent Episodic Migraine.
+     - **Claire Sterling** (`claire@corp.org`): Chronic Refractory Migraine with Gastroparesis.
+     - **Clinical Administrator** (`admin@migrainerelief.ai`): Administrative Governance.
+
+### 15.4 Backend API Endpoints (`app/api/v1/endpoints_auth.py`)
+Mounted under `/api/v1/auth` and root `/auth`:
+- `POST /api/v1/auth/signup`: Registers user, hashes password, generates HS256 JWT with secret `settings.SUPABASE_JWT_SECRET`.
+- `POST /api/v1/auth/login`: Authenticates credentials and returns JWT bearer token.
+- `POST /api/v1/auth/magic-link`: Passwordless email verification and session generation.
+- `POST /api/v1/auth/anonymous`: Ephemeral guest token issuance.
+- `GET /api/v1/auth/me`: Validates Bearer token and returns profile + custom intake vectors.
+- `GET /api/v1/auth/personas`: Returns benchmark persona metadata.
+
+### 15.5 Step 3: Clinical Evaluation & Feature Vector Questionnaire (`questionnaire`)
+- Captures 23 benchmark inputs + IHS Visual Aura table pattern selection (#0–#27) + temporal progression notes.
+- Submits payload to `/patient/save-data` with authenticated Bearer token.
+- Saves Gulf Standard Time (GST) persistent JSON record.
+- Routes user seamlessly to `/results` with personalized AI classification.
+

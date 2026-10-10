@@ -17,17 +17,28 @@ import { LoginModal } from './components/LoginModal';
 import { ShieldCheck, ChevronRight, Zap, Clock, Lock, ArrowRight, Sparkles } from 'lucide-react';
 
 export const App: React.FC = () => {
-  // Client-Side URL Route Management
+  // Client-Side URL Route Management with GitHub Pages & Hash Support
   const [currentRoute, setCurrentRoute] = useState<NavRoute>(() => {
-    const p = window.location.pathname;
-    if (['/news', '/medications', '/research', '/datasets', '/github', '/classification', '/under-construction', '/login', '/results'].includes(p)) {
-      return p as NavRoute;
+    const hash = window.location.hash.replace(/^#\/?/, '/');
+    let p = window.location.pathname;
+    if (p.startsWith('/MigraineRelief')) {
+      p = p.replace(/^\/MigraineRelief/, '') || '/';
     }
+    if (p.length > 1 && p.endsWith('/')) {
+      p = p.slice(0, -1);
+    }
+    const valid = ['/news', '/medications', '/research', '/datasets', '/github', '/classification', '/under-construction', '/login', '/results'];
+    if (valid.includes(hash)) return hash as NavRoute;
+    if (valid.includes(p)) return p as NavRoute;
     return '/';
   });
 
   const [isUploadModalOpen, setIsUploadModalOpen] = useState<boolean>(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+
+  const [userRole, setUserRole] = useState<string>(() => {
+    return localStorage.getItem('migraine_user_role') || 'user';
+  });
 
   // Authentication State with LocalStorage persistence
   const [username, setUsername] = useState<string>(() => {
@@ -57,42 +68,68 @@ export const App: React.FC = () => {
 
   const hasAnalyzedData = !!userData;
 
-  // Sync route changes with browser history
+  // Sync route changes with browser history (preserves /MigraineRelief GitHub Pages base path)
   const navigateTo = (route: NavRoute) => {
     if (route === '/login') {
       setIsLoginModalOpen(true);
       return;
     }
     setCurrentRoute(route);
-    if (window.location.pathname !== route) {
-      window.history.pushState({}, '', route);
+    const isGhPages = window.location.pathname.startsWith('/MigraineRelief');
+    const basePath = isGhPages ? '/MigraineRelief' : '';
+    const targetUrl = basePath ? (route === '/' ? `${basePath}/` : `${basePath}${route}`) : route;
+    if (window.location.pathname !== targetUrl && window.location.hash !== `#${route}`) {
+      window.history.pushState({}, '', targetUrl);
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   useEffect(() => {
     const handlePopState = () => {
-      const p = window.location.pathname;
-      if (['/news', '/medications', '/research', '/datasets', '/github', '/classification', '/under-construction', '/login', '/results'].includes(p)) {
+      const hash = window.location.hash.replace(/^#\/?/, '/');
+      let p = window.location.pathname;
+      if (p.startsWith('/MigraineRelief')) {
+        p = p.replace(/^\/MigraineRelief/, '') || '/';
+      }
+      if (p.length > 1 && p.endsWith('/')) {
+        p = p.slice(0, -1);
+      }
+      const valid = ['/news', '/medications', '/research', '/datasets', '/github', '/classification', '/under-construction', '/login', '/results'];
+      if (valid.includes(hash)) {
+        setCurrentRoute(hash as NavRoute);
+      } else if (valid.includes(p)) {
         setCurrentRoute(p as NavRoute);
       } else {
         setCurrentRoute('/');
       }
     };
     window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handlePopState);
+    };
   }, []);
 
-  const handleLogin = (name: string) => {
+  const handleLogin = (name: string, token?: string, role?: string) => {
     setUsername(name);
     setIsLoggedIn(true);
+    const resolvedRole = role || (name.toLowerCase().includes('admin') ? 'admin' : 'user');
+    setUserRole(resolvedRole);
     localStorage.setItem('migraine_user_name', name);
+    localStorage.setItem('migraine_user_role', resolvedRole);
+    if (token) {
+      localStorage.setItem('migraine_access_token', token);
+    }
   };
 
   const handleLogout = () => {
     setUsername('Guest Researcher');
     setIsLoggedIn(false);
+    setUserRole('user');
     localStorage.removeItem('migraine_user_name');
+    localStorage.removeItem('migraine_user_role');
+    localStorage.removeItem('migraine_access_token');
   };
 
   const handleDataSubmit = (data: MigraineValuesMap, filename: string, gstTime: string) => {
@@ -115,6 +152,7 @@ export const App: React.FC = () => {
         onOpenLogin={() => setIsLoginModalOpen(true)}
         isLoggedIn={isLoggedIn}
         username={username}
+        userRole={userRole}
         onLogout={handleLogout}
       />
 
@@ -363,11 +401,14 @@ export const App: React.FC = () => {
         </div>
       </footer>
 
-      {/* 4. Modal: Upload Migraine Clinical Data Form (with Phase 8 Privacy Gate) */}
+      {/* 4. Modal: Upload Migraine Clinical Data Form (with PP Warning Gate & GoTrue Auth Gate) */}
       <UploadDataModal
         isOpen={isUploadModalOpen}
         onClose={() => setIsUploadModalOpen(false)}
         loginName={username}
+        isLoggedIn={isLoggedIn}
+        userRole={userRole}
+        onLogin={handleLogin}
         onSubmitAndAnalyze={handleDataSubmit}
       />
 
@@ -377,6 +418,7 @@ export const App: React.FC = () => {
         onClose={() => setIsLoginModalOpen(false)}
         isLoggedIn={isLoggedIn}
         username={username}
+        userRole={userRole}
         onLogin={handleLogin}
         onLogout={handleLogout}
       />

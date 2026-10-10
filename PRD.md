@@ -310,6 +310,18 @@ flowchart TD
     - **Magic Link / Passwordless Authentication**: One-time cryptographic email tokens for low-friction, password-free login.
     - **Role-Based Token Claims**: Issues cryptographically signed JSON Web Tokens (JWT) containing `user_id`, `email`, and role claims (`authenticated`, `admin`).
   - Strict anonymous-to-authenticated upgrade path: Users can begin as `anonymousPatient_0` and later bind their local encrypted history to an authenticated account with one click.
+* **Analyze My Migraine Pattern Unified 3-Step Modal Flow**:
+  1. **Step 1: Protected Personal (PP) Information Warning Gate (`privacy_gate`)**:
+     - Explicit high-visibility modal popup triggered immediately upon clicking *"Analyze My Migraine Patterns"*.
+     - Rigorous clinical research and HIPAA/GDPR warning forbidding entry of legal names, emails, phone numbers, street addresses, dates of birth, Social Security Numbers (SSN), Medical Record Numbers (MRN), or insurance identifiers.
+     - Enforces explicit user acknowledgment checkbox before unlocking the next step.
+  2. **Step 2: Open-Source Account Authentication Gate (`auth_prompt`)**:
+     - Directly following the PP warning acknowledgment, the modal prompts the user to **Sign In** or **Create an Account** using the open-source GoTrue authentication engine ([`SRP-alohamora/supabase-opensrc-auth`](https://github.com/SRP-alohamora/supabase-opensrc-auth)).
+     - Supports email/password login, account registration with clinical persona selection, passwordless magic links, one-click demo personas (Alexa Rivera, Claire Sterling, Administrator), or emergency Zero-PII Anonymous Guest sessions (`anonymousPatient_<hex>`).
+     - Detects active logged-in sessions with one-click continuation as the authenticated profile.
+  3. **Step 3: Clinical Intake Questionnaire (`questionnaire`)**:
+     - Collects the 23 Kaggle benchmark inputs and interactive IHS visual aura spectrum selections (#0–#27).
+     - Persists Gulf Standard Time (GST) export file and executes supervised classification.
 * **User Customization & Form Submission Persistence**:
   - **Clinical Intake Synchronization**: When an authenticated user completes or customizes the diagnostic questionnaire (baseline migraine features, aura patterns, nausea susceptibility, allodynia velocity, past triptan adverse events, pediatric indicators):
     - Submitting the form immediately persists the clinical state vector to the `patient_custom_intakes` table in PostgreSQL, keyed to `auth.uid()`.

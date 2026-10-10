@@ -26,6 +26,9 @@ export interface PatientAuraExperience {
   clinicalInsight: string;
 }
 
+const BASE = (import.meta.env.BASE_URL || './').replace(/\/+$/, '');
+const getAuraPath = (n: number) => `${BASE ? BASE : '.'}/aura_images/aura_${n}.png`;
+
 export const AURA_PHENOMENA: AuraPhenomenon[] = [
   {
     id: 0,
@@ -35,7 +38,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Baseline',
     description: 'Unimpaired field of vision: Two hot air balloons over a green meadow under a clear blue sky.',
     clinicalSignificance: 'Standard reference point used to evaluate baseline visual acuity without aura disturbances.',
-    imagePath: '/aura_images/aura_0.png',
+    imagePath: getAuraPath(0),
   },
   {
     id: 1,
@@ -45,7 +48,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Positive Phenomenon',
     description: 'Bright white/yellow glowing core or shimmering flash in central vision.',
     clinicalSignificance: 'Elementary positive symptom indicating initial focal depolarization in the occipital pole.',
-    imagePath: '/aura_images/aura_1.png',
+    imagePath: getAuraPath(1),
   },
   {
     id: 2,
@@ -55,7 +58,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Distorted Vision',
     description: 'Loss of sharpness, hazy out-of-focus vision, or foggy veil obscuring detail.',
     clinicalSignificance: 'Common resolution-phase or prodromal blur accompanying spreading cortical depression.',
-    imagePath: '/aura_images/aura_2.png',
+    imagePath: getAuraPath(2),
   },
   {
     id: 3,
@@ -65,7 +68,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Positive Phenomenon',
     description: 'Classic multicolored jagged, zig-zag fortification lines radiating or shimmering on one side.',
     clinicalSignificance: 'Pathognomonic hallmark of migraine aura, reflecting slow retinotopic propagation across visual cortex.',
-    imagePath: '/aura_images/aura_3.png',
+    imagePath: getAuraPath(3),
   },
   {
     id: 4,
@@ -75,7 +78,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Negative Deficit',
     description: 'Dark, opaque circular blind spot obscuring the center of the visual field.',
     clinicalSignificance: 'Negative visual deficit. If sudden (<5 min) and isolated without positive shimmer, mandates acute stroke triage.',
-    imagePath: '/aura_images/aura_4.png',
+    imagePath: getAuraPath(4),
   },
   {
     id: 5,
@@ -85,7 +88,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Negative Deficit',
     description: 'Scattered small dark, blank, or missing spots distributed across the visual field.',
     clinicalSignificance: 'Frequently experienced as missing letters while reading before coalescing into a larger crescent.',
-    imagePath: '/aura_images/aura_5.png',
+    imagePath: getAuraPath(5),
   },
   {
     id: 6,
@@ -95,7 +98,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Positive Phenomenon',
     description: 'Scattered bright sparkles, glitter, or dancing sparks of light resembling fireworks.',
     clinicalSignificance: 'Diffuse positive retinal or striate cortical excitation.',
-    imagePath: '/aura_images/aura_6.png',
+    imagePath: getAuraPath(6),
   },
   {
     id: 7,
@@ -105,7 +108,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Positive Phenomenon',
     description: 'Cloudy white flickering spots or patches oscillating in brightness.',
     clinicalSignificance: 'Frequent early manifestation preceding expanding fortification arcs.',
-    imagePath: '/aura_images/aura_7.png',
+    imagePath: getAuraPath(7),
   },
   {
     id: 8,
@@ -115,7 +118,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Positive Phenomenon',
     description: 'Vibrant multi-colored floating luminous disks or circular spots (red, yellow, green, violet).',
     clinicalSignificance: 'Often cited as the very first sign of an aura attack before linear geometric crystallization.',
-    imagePath: '/aura_images/aura_8.png',
+    imagePath: getAuraPath(8),
   },
   {
     id: 9,
@@ -125,7 +128,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Positive Phenomenon',
     description: 'Linear streaks of colored light shooting rapidly across the visual plane.',
     clinicalSignificance: 'Rapid transient positive phenomenon; must be differentiated from vitreous traction or retinal tear.',
-    imagePath: '/aura_images/aura_9.png',
+    imagePath: getAuraPath(9),
   },
   {
     id: 10,
@@ -135,7 +138,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Distorted Vision',
     description: 'Geometric polygonal multi-colored fractured planes resembling looking through a kaleidoscope.',
     clinicalSignificance: 'Higher-order associative visual cortex involvement (V2/V3/V4 area synchronization).',
-    imagePath: '/aura_images/aura_10.png',
+    imagePath: getAuraPath(10),
   },
   {
     id: 11,
@@ -145,7 +148,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Distorted Vision',
     description: 'Grainy TV-static or fine flickering dots pervading the entire field of vision.',
     clinicalSignificance: 'Characteristic of thalamocortical dysrhythmia; common comorbidity in chronic migraineurs.',
-    imagePath: '/aura_images/aura_11.png',
+    imagePath: getAuraPath(11),
   },
   {
     id: 12,
@@ -155,7 +158,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Distorted Vision',
     description: 'Shimmering wavy air, hot-road mirage, or looking through running water.',
     clinicalSignificance: 'Smooth wave propagation altering spatial phase perception.',
-    imagePath: '/aura_images/aura_12.png',
+    imagePath: getAuraPath(12),
   },
   {
     id: 13,
@@ -165,7 +168,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Positive Phenomenon',
     description: 'C-shaped curved multicolored jagged ring or arc expanding toward the visual periphery.',
     clinicalSignificance: 'Classic evolving morphology as cortical spreading depression travels along the calcarine fissure.',
-    imagePath: '/aura_images/aura_13.png',
+    imagePath: getAuraPath(13),
   },
   {
     id: 14,
@@ -175,7 +178,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Negative Deficit',
     description: 'Complete black loss of either the left or right half of the visual field.',
     clinicalSignificance: 'Retrochiasmal unilateral pathway inhibition. Must be evaluated for gradual march vs sudden vascular onset.',
-    imagePath: '/aura_images/aura_14.png',
+    imagePath: getAuraPath(14),
   },
   {
     id: 15,
@@ -185,7 +188,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Negative Deficit',
     description: 'Loss or darkening of a specific quadrant (upper or lower, left or right).',
     clinicalSignificance: 'Focal deficit along Meyer\'s loop or parietal optic radiations.',
-    imagePath: '/aura_images/aura_15.png',
+    imagePath: getAuraPath(15),
   },
   {
     id: 16,
@@ -195,7 +198,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Negative Deficit',
     description: 'Progressive peripheral darkening with preserved central tubular sight.',
     clinicalSignificance: 'Bilateral peripheral cortical suppression; often accompanies severe pre-headache autonomic surge.',
-    imagePath: '/aura_images/aura_16.png',
+    imagePath: getAuraPath(16),
   },
   {
     id: 17,
@@ -205,7 +208,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Distorted Vision',
     description: 'Objects appear significantly smaller and more distant than their true physical dimensions.',
     clinicalSignificance: 'Dorsal visual stream perceptual scaling alteration (Alice in Wonderland variant).',
-    imagePath: '/aura_images/aura_17.png',
+    imagePath: getAuraPath(17),
   },
   {
     id: 18,
@@ -215,7 +218,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Distorted Vision',
     description: 'Visual scene broken down into chunky, cubist, or polygonal pixel tiles.',
     clinicalSignificance: 'Loss of visual spatial integration across adjacent receptive fields.',
-    imagePath: '/aura_images/aura_18.png',
+    imagePath: getAuraPath(18),
   },
   {
     id: 19,
@@ -225,7 +228,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Distorted Vision',
     description: 'Perception of looking through a fractured mirror or cracked car windshield.',
     clinicalSignificance: 'Severe discontinuity in retinotopic mapping during acute phase.',
-    imagePath: '/aura_images/aura_19.png',
+    imagePath: getAuraPath(19),
   },
   {
     id: 20,
@@ -235,7 +238,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Positive Phenomenon',
     description: 'Glowing borders, luminescent outlines, or glowing halos radiating around people and objects.',
     clinicalSignificance: 'Border enhancement caused by hyperexcitable lateral inhibition in early visual cortex.',
-    imagePath: '/aura_images/aura_20.png',
+    imagePath: getAuraPath(20),
   },
   {
     id: 21,
@@ -245,7 +248,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Negative Deficit',
     description: 'Total temporary blackout or dark void across the entire binocular field.',
     clinicalSignificance: 'Transient bilateral visual cortex suppression; SNOOP4 emergency red flag if sudden or persistent.',
-    imagePath: '/aura_images/aura_21.png',
+    imagePath: getAuraPath(21),
   },
   {
     id: 22,
@@ -255,7 +258,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Distorted Vision',
     description: 'Visual perspective distortion where surroundings appear far away in a tunnel or recess.',
     clinicalSignificance: 'Parieto-occipital depth perception disruption.',
-    imagePath: '/aura_images/aura_22.png',
+    imagePath: getAuraPath(22),
   },
   {
     id: 23,
@@ -265,7 +268,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Distorted Vision',
     description: 'Objects appear looming, gigantic, or abnormally close up.',
     clinicalSignificance: 'Receptive field magnification alteration in ventral visual stream.',
-    imagePath: '/aura_images/aura_23.png',
+    imagePath: getAuraPath(23),
   },
   {
     id: 24,
@@ -275,7 +278,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Distorted Vision',
     description: 'Unnatural color palette shift, inverted hues (e.g. orange sky, blue vegetation).',
     clinicalSignificance: 'Cortical color processing disruption in visual area V4.',
-    imagePath: '/aura_images/aura_24.png',
+    imagePath: getAuraPath(24),
   },
   {
     id: 25,
@@ -285,7 +288,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Complex / Metamorphopsia',
     description: 'Complex surreal distortions of body image, object contours, time perception, and proportions.',
     clinicalSignificance: 'Temporoparietal junction integration anomaly; frequent in pediatric and adolescent migraine.',
-    imagePath: '/aura_images/aura_25.png',
+    imagePath: getAuraPath(25),
   },
   {
     id: 26,
@@ -295,7 +298,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Distorted Vision',
     description: 'Persistent afterimages or trailing multiple silhouettes behind moving objects.',
     clinicalSignificance: 'Prolonged visual persistence caused by cortical disinhibition.',
-    imagePath: '/aura_images/aura_26.png',
+    imagePath: getAuraPath(26),
   },
   {
     id: 27,
@@ -305,7 +308,7 @@ export const AURA_PHENOMENA: AuraPhenomenon[] = [
     categoryLabel: 'Patient-Reported Variant',
     description: 'Monochromatic black-and-white jagged fortification spectrum with lines developing on the opposite side.',
     clinicalSignificance: 'Achromatopsic aura variant reported by patients experiencing classic teichopsia without chromatic activation.',
-    imagePath: '/aura_images/aura_27.png',
+    imagePath: getAuraPath(27),
   },
 ];
 

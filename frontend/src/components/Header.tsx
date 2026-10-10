@@ -50,7 +50,7 @@ export const Header: React.FC<HeaderProps> = ({
         title="Trigeminovascular Synapse: Ionic Channel Gating & Receptor Antagonism"
       >
         <img
-          src="/neural_synapse_ions.jpg"
+          src={`${(import.meta.env.BASE_URL || './').replace(/\/+$/, '') || '.'}/neural_synapse_ions.jpg`}
           alt="Neural Synapse and Ionic Gating Cascade across the synaptic cleft"
           className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
         />
