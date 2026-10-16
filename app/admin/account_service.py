@@ -64,12 +64,14 @@ class AdminAccountService:
         cls._profiles[alexa_id] = {
             "id": alexa_id,
             "email": "alexa@school.edu",
+            "username": "alexa",
+            "display_name": "Alexa Rivera",
             "role": "user",
             "status": "active",
             "created_at": "2026-08-12T14:30:00Z",
             "last_sign_in_at": now,
             "moh_days": 4,
-            "password_hash": hashlib.sha256("password".encode("utf-8")).hexdigest(),
+            "password_hash": hashlib.sha256("alexa".encode("utf-8")).hexdigest(),
         }
         cls._intakes[alexa_id] = {
             "user_id": alexa_id,
@@ -114,12 +116,14 @@ class AdminAccountService:
         cls._profiles[claire_id] = {
             "id": claire_id,
             "email": "claire@corp.org",
+            "username": "claire",
+            "display_name": "Claire Sterling",
             "role": "user",
             "status": "active",
             "created_at": "2026-08-15T09:15:00Z",
             "last_sign_in_at": now,
             "moh_days": 8,
-            "password_hash": hashlib.sha256("password".encode("utf-8")).hexdigest(),
+            "password_hash": hashlib.sha256("claire".encode("utf-8")).hexdigest(),
         }
         cls._intakes[claire_id] = {
             "user_id": claire_id,
@@ -555,7 +559,10 @@ class AdminAccountService:
         # Check password hash with standard demo fallbacks
         pwd_hash = matched_profile.get("password_hash")
         entered_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
-        is_demo_pass = password in ["admin123", "password", "alexa123", "claire123", "admin10102011"]
+        is_demo_pass = password in [
+            "admin123", "password", "alexa", "claire", 
+            "alexarivera", "clairesterling", "alexa123", "claire123", "admin10102011"
+        ]
 
         if pwd_hash and pwd_hash != entered_hash and not is_demo_pass:
             raise HTTPException(

@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "customer_login": "Alexa Rivera",
+    "filename": "Alexa_Rivera_20261016_10h15m_GST.json",
+    "saved_at_gst": "2026-10-16 10:15 GST (UTC+4)",
+    "timezone": "Gulf Standard Time (UTC+4)",
+    "rag_indexed": true,
+    "privacy_standard": "Zero-PII HIPAA Compliant"
+  },
+  "diagnostic_features_24": {
+    "Age": 30,
+    "Duration": 1,
+    "Frequency": 5,
+    "Location": 1,
+    "Character": 1,
+    "Intensity": 2,
+    "Nausea": 1,
+    "Vomit": 0,
+    "Phonophobia": 1,
+    "Photophobia": 1,
+    "Visual": 1,
+    "Sensory": 2,
+    "Dysphasia": 0,
+    "Dysarthria": 0,
+    "Vertigo": 0,
+    "Tinnitus": 0,
+    "Hypoacusis": 0,
+    "Diplopia": 0,
+    "Defect": 0,
+    "Ataxia": 0,
+    "Conscience": 0,
+    "Paresthesia": 0,
+    "DPF": 0,
+    "Predicted_Type": "Typical aura with migraine"
+  },
+  "threshold_analysis": {
+    "allostatic_score": 2.0,
+    "pre_allodynic_window_minutes": 60,
+    "gastric_stasis_present": true,
+    "recommended_route": "INTRANASAL_SPRAY",
+    "recommended_molecule": "DHE POD Intranasal (INP104)",
+    "moh_triptan_days": 0,
+    "moh_nsaid_days": 0,
+    "moh_quota_exceeded": false
+  }
+}

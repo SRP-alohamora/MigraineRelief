@@ -10,6 +10,7 @@ from app.api.v1.endpoints_rescue import router as rescue_router
 from app.api.v1.endpoints_patient import router as patient_router
 from app.api.v1.endpoints_admin import router as admin_router
 from app.api.v1.endpoints_auth import router as auth_router
+from app.api.v1.endpoints_rag import router as rag_router
 from app.telemetry.metrics import RescueMetrics
 
 
@@ -41,6 +42,7 @@ app.add_middleware(
 # Mount API Routers
 app.include_router(api_v1_router, prefix=settings.API_V1_STR)
 app.include_router(rescue_router)  # Also mount at root level /rescue for direct spec compatibility
+app.include_router(rag_router)  # Mount at root level /rag for direct RAG widget compatibility
 app.include_router(patient_router)  # Also mount at root level /patient
 app.include_router(admin_router)  # Mount at root level /admin
 app.include_router(auth_router)  # Also mount at root level /auth for direct Gotrue compatibility

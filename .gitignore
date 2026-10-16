@@ -26,4 +26,6 @@ data/patient_records/*.json
 app/knowledge/viking_filesystem/memories/dr_sarah_connor/
 app/knowledge/viking_filesystem/memories/shivanipradhan/
 
-
+# Scratch and office lock files
+scratch/
+~$*

@@ -143,3 +143,23 @@ def test_medications_tab_clinical_catalog():
     assert "Neiguan" in content
     assert "Fengchi" in content
     assert "Yin Tang" in content
+
+
+def test_acute_rescue_triage_widget_mounted():
+    """Verify that AcuteRescueTriageWidget is mounted on homepage with sensory ergonomics."""
+    app_path = REPO_ROOT / "frontend" / "src" / "App.tsx"
+    widget_path = REPO_ROOT / "frontend" / "src" / "components" / "AcuteRescueTriageWidget.tsx"
+    
+    assert app_path.exists(), "App.tsx must exist"
+    assert widget_path.exists(), "AcuteRescueTriageWidget.tsx must exist"
+    
+    app_content = app_path.read_text(encoding="utf-8")
+    assert "AcuteRescueTriageWidget" in app_content
+    assert "acute-rescue-triage" in app_content
+    
+    widget_content = widget_path.read_text(encoding="utf-8")
+    assert "claire" in widget_content
+    assert "alexa" in widget_content
+    assert "snoop4_emergency_detected" in widget_content
+    assert "Pre-Allodynic" in widget_content
+    assert "BMJ 2024" in widget_content

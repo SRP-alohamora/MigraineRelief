@@ -14,6 +14,8 @@ import {
 import { MedicationKnowledgeTile } from './components/MedicationKnowledgeTile';
 import { MedicationsTab } from './components/MedicationsTab';
 import { LoginModal } from './components/LoginModal';
+import { AcuteRescueTriageWidget } from './components/AcuteRescueTriageWidget';
+import { ImmediateReliefModal } from './components/ImmediateReliefModal';
 import { ShieldCheck, ChevronRight, Zap, Clock, Lock, ArrowRight, Sparkles } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -35,6 +37,7 @@ export const App: React.FC = () => {
 
   const [isUploadModalOpen, setIsUploadModalOpen] = useState<boolean>(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+  const [isReliefModalOpen, setIsReliefModalOpen] = useState<boolean>(false);
 
   const [userRole, setUserRole] = useState<string>(() => {
     return localStorage.getItem('migraine_user_role') || 'user';
@@ -222,18 +225,26 @@ export const App: React.FC = () => {
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
                   <button
                     type="button"
+                    onClick={() => setIsReliefModalOpen(true)}
+                    className="btn-primary text-sm sm:text-base px-7 py-3.5 w-full sm:w-auto bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-900/20 text-white flex items-center justify-center gap-2 font-black transition-all cursor-pointer"
+                  >
+                    <Zap className="w-4 h-4 fill-current text-amber-300" />
+                    <span>Find Immediate Migraine Relief</span>
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => setIsUploadModalOpen(true)}
-                    className="btn-primary text-sm sm:text-base px-7 py-3.5 w-full sm:w-auto"
+                    className="btn-secondary text-sm sm:text-base px-7 py-3.5 w-full sm:w-auto"
                   >
                     <span>Analyze My Migraine Patterns</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                   <button
                     type="button"
-                    onClick={() => navigateTo('/research')}
-                    className="btn-secondary text-sm sm:text-base px-7 py-3.5 w-full sm:w-auto"
+                    onClick={() => navigateTo('/medications')}
+                    className="text-xs sm:text-sm text-slate-600 hover:text-[#005a9c] font-bold underline px-3 py-2"
                   >
-                    Explore the Research
+                    Explore Medications
                   </button>
                 </div>
 
@@ -268,6 +279,15 @@ export const App: React.FC = () => {
                 </div>
               </div>
             </section>
+
+            {/* TRACK 2 LANGGRAPH CLINICAL RAG: IN-ATTACK EMERGENCY RESCUE WIDGET */}
+            <div id="acute-rescue-triage" className="scroll-mt-6">
+              <AcuteRescueTriageWidget
+                onOpenLoginModal={() => setIsLoginModalOpen(true)}
+                isLoggedIn={isLoggedIn}
+                activeUsername={username}
+              />
+            </div>
 
             {/* Comprehensive Migraine Medications & Neuromodulation Feature Tile */}
             <MedicationKnowledgeTile onLearnMore={() => navigateTo('/medications')} />
@@ -421,6 +441,14 @@ export const App: React.FC = () => {
         userRole={userRole}
         onLogin={handleLogin}
         onLogout={handleLogout}
+      />
+
+      {/* 6. Modal: Step-by-Step Immediate Migraine Relief Modal */}
+      <ImmediateReliefModal
+        isOpen={isReliefModalOpen}
+        onClose={() => setIsReliefModalOpen(false)}
+        isLoggedIn={isLoggedIn}
+        activeUsername={username}
       />
     </div>
   );
