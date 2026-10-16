@@ -124,3 +124,26 @@ async def get_me(user: Dict[str, Any] = Depends(get_current_user)):
 async def list_personas():
     """Returns pre-configured demo clinical research personas for one-click testing."""
     return AdminAccountService.get_demo_personas()
+
+
+class VerifyProfilePasswordRequest(BaseModel):
+    user_id: str = Field(..., description="User ID, handle, or key (e.g. claire, alexa, admin)")
+    password: str = Field(..., description="Password to verify")
+
+
+@router.get("/registered-users", summary="List all active registered users for clinical rescue")
+async def list_registered_users():
+    """Returns all registered active platform accounts with clean display names."""
+    return AdminAccountService.get_registered_users()
+
+
+@router.post("/verify-profile-password", summary="Verify password for a registered profile")
+async def verify_profile_password(payload: VerifyProfilePasswordRequest):
+    """Verifies credentials for profile authentication in acute relief modal."""
+    is_valid = AdminAccountService.verify_user_password(payload.user_id, payload.password)
+    if not is_valid:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Incorrect password for profile '{payload.user_id}'.",
+        )
+    return {"verified": True, "user_id": payload.user_id}

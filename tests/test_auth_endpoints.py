@@ -200,3 +200,43 @@ def test_admin_user_reset_and_delete():
     users_res = client.get("/api/v1/admin/users", headers=headers)
     emails = [u["email"] for u in users_res.json()["accounts"]]
     assert "user_to_be_managed@clinic.org" not in emails
+
+
+def test_registered_users_for_immediate_relief():
+    """Verify all registered accounts are available with clean display names."""
+    res = client.get("/api/v1/auth/registered-users")
+    assert res.status_code == 200
+    data = res.json()
+    assert len(data) >= 4
+    names = [u["name"] for u in data]
+    assert "Claire" in names
+    assert "Alexa" in names
+    assert "Administrator" in names
+    assert "admin007" in names
+
+
+def test_verify_profile_password():
+    """Verify password checks for registered user profiles."""
+    # Correct password for Claire
+    res_ok = client.post(
+        "/api/v1/auth/verify-profile-password",
+        json={"user_id": "claire", "password": "claire"},
+    )
+    assert res_ok.status_code == 200
+    assert res_ok.json()["verified"] is True
+
+    # Correct password for Admin
+    admin_ok = client.post(
+        "/api/v1/auth/verify-profile-password",
+        json={"user_id": "admin", "password": "admin123"},
+    )
+    assert admin_ok.status_code == 200
+    assert admin_ok.json()["verified"] is True
+
+    # Incorrect password returns 401
+    res_err = client.post(
+        "/api/v1/auth/verify-profile-password",
+        json={"user_id": "claire", "password": "wrongpassword"},
+    )
+    assert res_err.status_code == 401
+

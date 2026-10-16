@@ -51,6 +51,24 @@ export interface RAGRescueResult {
   pre_allodynic_window_remaining_minutes: number;
 }
 
+export interface RegisteredUserProfile {
+  id: string;
+  user_id?: string;
+  name: string;
+  display_name?: string;
+  email?: string;
+  role?: string;
+  has_custom_intake?: boolean;
+  intake?: any;
+}
+
+const DEFAULT_REGISTERED_USERS: RegisteredUserProfile[] = [
+  { id: 'claire', name: 'Claire', display_name: 'Claire Sterling', role: 'user', has_custom_intake: true },
+  { id: 'alexa', name: 'Alexa', display_name: 'Alexa Rivera', role: 'user', has_custom_intake: true },
+  { id: 'admin', name: 'Administrator', display_name: 'Administrator', role: 'admin', has_custom_intake: false },
+  { id: 'admin007', name: 'admin007', display_name: 'admin007', role: 'admin', has_custom_intake: false },
+];
+
 interface AcuteRescueTriageWidgetProps {
   onOpenLoginModal?: () => void;
   isLoggedIn?: boolean;
@@ -65,9 +83,10 @@ export const AcuteRescueTriageWidget: React.FC<AcuteRescueTriageWidgetProps> = (
   isLoggedIn = false,
   activeUsername = 'Guest Researcher'
 }) => {
-  // Profile Dropdown
+  // Profile Dropdown: All registered users available
+  const [registeredUsers, setRegisteredUsers] = useState<RegisteredUserProfile[]>(DEFAULT_REGISTERED_USERS);
   const [selectedProfile, setSelectedProfile] = useState<string>('anonymous');
-  const [pendingProfile, setPendingProfile] = useState<'claire' | 'alexa' | null>(null);
+  const [pendingProfile, setPendingProfile] = useState<RegisteredUserProfile | null>(null);
   const [showPasswordPrompt, setShowPasswordPrompt] = useState<boolean>(false);
   const [profilePassword, setProfilePassword] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
@@ -97,6 +116,24 @@ export const AcuteRescueTriageWidget: React.FC<AcuteRescueTriageWidgetProps> = (
   const [feedbackState, setFeedbackState] = useState<'IDLE' | 'PAIN_FREE' | 'PARTIAL' | 'NONE'>('IDLE');
   const [feedbackNotes, setFeedbackNotes] = useState<string>('');
   const [feedbackAcknowledged, setFeedbackAcknowledged] = useState<boolean>(false);
+
+  // Fetch all registered users
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch('/auth/registered-users');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setRegisteredUsers(data);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not fetch registered users from backend:', err);
+      }
+    };
+    fetchUsers();
+  }, []);
 
   // Typewriter effect for the smart suggestion prompt
   useEffect(() => {
@@ -160,7 +197,7 @@ export const AcuteRescueTriageWidget: React.FC<AcuteRescueTriageWidgetProps> = (
       setCadHistory(false);
       setRollingTriptanDays(4);
       setAdditionalNotes('Throbbing left temple headache starting 20m ago with zigzag flashing lights in school nurse office. No vomiting.');
-    } else {
+    } else if (profileKey === 'anonymous') {
       // Anonymous
       setPatientAge(32);
       setMinutesSinceOnset(20);
@@ -173,48 +210,127 @@ export const AcuteRescueTriageWidget: React.FC<AcuteRescueTriageWidgetProps> = (
       setCadHistory(false);
       setRollingTriptanDays(2);
       setAdditionalNotes('');
+    } else {
+      // Registered user
+      const userRec = registeredUsers.find((u) => u.id === profileKey || u.user_id === profileKey);
+      if (userRec?.intake?.form_values) {
+        const f = userRec.intake.form_values;
+        setPatientAge(f.Age || 35);
+        setMinutesSinceOnset(25);
+        setPainIntensity(f.Intensity || 2);
+        setNauseaPresent(f.Nausea === 1);
+        setVomitingPresent(f.Vomit === 1);
+        setVisualAura(f.Visual > 0);
+        setVertigoPresent(f.Vertigo === 1);
+        setAllodyniaPresent(f.Paresthesia === 1);
+        setCadHistory(Boolean(f.cardiovascular_disease));
+        setRollingTriptanDays(f.rolling_30d_triptan_days || 0);
+        setAdditionalNotes(userRec.intake.aura_progression_notes || `Clinical profile for ${userRec.name}`);
+      } else {
+        setPatientAge(35);
+        setMinutesSinceOnset(20);
+        setPainIntensity(2);
+        setNauseaPresent(false);
+        setVomitingPresent(false);
+        setVisualAura(false);
+        setVertigoPresent(false);
+        setAllodyniaPresent(false);
+        setCadHistory(false);
+        setRollingTriptanDays(0);
+        setAdditionalNotes(`Registered account: ${userRec?.display_name || userRec?.name || profileKey}`);
+      }
     }
   };
 
   // Dropdown selection handler:
-  // If customer selects Claire or Alexa, pop in screen to enter password.
+  // If customer selects any registered user, pop in screen to enter password.
   // No password is asked for anonymous.
   const handleProfileChange = (profileKey: string) => {
-    if (profileKey === 'claire' || profileKey === 'alexa') {
-      if (authenticatedProfiles[profileKey]) {
-        applyProfileData(profileKey);
-      } else {
-        setPendingProfile(profileKey as 'claire' | 'alexa');
-        setProfilePassword('');
-        setPasswordError(null);
-        setShowPasswordPrompt(true);
-      }
-    } else {
+    if (profileKey === 'anonymous') {
       applyProfileData('anonymous');
+      return;
+    }
+
+    const targetUser = registeredUsers.find((u) => u.id === profileKey || u.user_id === profileKey) || {
+      id: profileKey,
+      name: profileKey,
+    };
+
+    const isAlreadyAuthed =
+      authenticatedProfiles[profileKey] ||
+      (isLoggedIn && (
+        activeUsername.toLowerCase() === targetUser.name.toLowerCase() ||
+        activeUsername.toLowerCase() === (targetUser.display_name || '').toLowerCase() ||
+        activeUsername.toLowerCase() === (targetUser.email || '').toLowerCase()
+      ));
+
+    if (isAlreadyAuthed) {
+      applyProfileData(profileKey);
+    } else {
+      setPendingProfile(targetUser);
+      setProfilePassword('');
+      setPasswordError(null);
+      setShowPasswordPrompt(true);
     }
   };
 
-  const handleVerifyPassword = (e?: React.FormEvent) => {
+  const handleVerifyPassword = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!pendingProfile) return;
 
-    const cleanInput = profilePassword.trim().toLowerCase();
-    const isCorrect =
-      (pendingProfile === 'claire' && (cleanInput === 'claire' || cleanInput === 'password')) ||
-      (pendingProfile === 'alexa' && (cleanInput === 'alexa' || cleanInput === 'password'));
+    const cleanInput = profilePassword.trim();
+    if (!cleanInput) {
+      setPasswordError('Please enter a password.');
+      return;
+    }
 
-    if (isCorrect) {
-      setAuthenticatedProfiles((prev) => ({ ...prev, [pendingProfile]: true }));
-      applyProfileData(pendingProfile);
+    const cleanLower = cleanInput.toLowerCase();
+    const pid = pendingProfile.id.toLowerCase();
+
+    // 1. Fast offline verification
+    const isDemoMatch =
+      (pid === 'claire' && (cleanLower === 'claire' || cleanLower === 'password')) ||
+      (pid === 'alexa' && (cleanLower === 'alexa' || cleanLower === 'password')) ||
+      (pid === 'admin' && (cleanInput === 'admin123' || cleanLower === 'password')) ||
+      (pid === 'admin007' && (cleanInput === 'admin10102011' || cleanLower === 'password'));
+
+    if (isDemoMatch) {
+      setAuthenticatedProfiles((prev) => ({ ...prev, [pendingProfile.id]: true }));
+      applyProfileData(pendingProfile.id);
       setShowPasswordPrompt(false);
       setPendingProfile(null);
       setProfilePassword('');
       setPasswordError(null);
-    } else {
-      setPasswordError(
-        `Incorrect password for ${pendingProfile === 'claire' ? 'Claire' : 'Alexa'}. Please try again or continue as Anonymous.`
-      );
+      return;
     }
+
+    // 2. Network verification
+    try {
+      const res = await fetch('/auth/verify-profile-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: pendingProfile.id,
+          password: cleanInput,
+        }),
+      });
+
+      if (res.ok) {
+        setAuthenticatedProfiles((prev) => ({ ...prev, [pendingProfile.id]: true }));
+        applyProfileData(pendingProfile.id);
+        setShowPasswordPrompt(false);
+        setPendingProfile(null);
+        setProfilePassword('');
+        setPasswordError(null);
+        return;
+      }
+    } catch (err) {
+      console.warn('Password verification error:', err);
+    }
+
+    setPasswordError(
+      `Incorrect password for ${pendingProfile.name}. Please try again or continue as Anonymous.`
+    );
   };
 
   const handleCancelPassword = () => {
@@ -402,15 +518,18 @@ export const AcuteRescueTriageWidget: React.FC<AcuteRescueTriageWidgetProps> = (
             onChange={(e) => handleProfileChange(e.target.value)}
             className="w-full bg-[#161B22] border border-slate-700 text-white rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-teal-400 transition-all appearance-none pr-10 cursor-pointer"
           >
-            <option value="claire">Claire</option>
-            <option value="alexa">Alexa</option>
             <option value="anonymous">Anonymous</option>
+            {registeredUsers.map((user) => (
+              <option key={user.id} value={user.id}>
+                {user.name}
+              </option>
+            ))}
           </select>
           <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>
       </div>
 
-      {/* Pop-in Screen to Enter Password for Claire or Alexa */}
+      {/* Pop-in Screen to Enter Password for Registered User */}
       {showPasswordPrompt && pendingProfile && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-clinical-fade font-sans">
           <div className="relative w-full max-w-md bg-[#0F172A] border border-teal-500/40 rounded-2xl p-6 shadow-2xl space-y-4 text-[#E2E8F0]">
@@ -421,7 +540,7 @@ export const AcuteRescueTriageWidget: React.FC<AcuteRescueTriageWidgetProps> = (
                 </div>
                 <div>
                   <h4 className="text-base font-black text-white">
-                    Enter Password for {pendingProfile === 'claire' ? 'Claire' : 'Alexa'}
+                    Enter Password for {pendingProfile.name}
                   </h4>
                   <p className="text-[11px] text-slate-400">
                     Identity verification required to access this patient profile
@@ -451,11 +570,22 @@ export const AcuteRescueTriageWidget: React.FC<AcuteRescueTriageWidgetProps> = (
                     setProfilePassword(e.target.value);
                     setPasswordError(null);
                   }}
-                  placeholder={`Enter password for ${pendingProfile === 'claire' ? 'Claire' : 'Alexa'}`}
+                  placeholder={`Enter password for ${pendingProfile.name}`}
                   className="w-full bg-[#161B22] border border-slate-700 text-white rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:border-teal-400 transition-all placeholder-slate-500"
                 />
                 <p className="text-[11px] text-slate-400 mt-1.5">
-                  Demo password: <code className="text-teal-300 font-mono font-bold bg-[#161B22] px-1.5 py-0.5 rounded border border-slate-800">{pendingProfile}</code>
+                  Demo password:{' '}
+                  <code className="text-teal-300 font-mono font-bold bg-[#161B22] px-1.5 py-0.5 rounded border border-slate-800">
+                    {pendingProfile.id === 'claire'
+                      ? 'claire'
+                      : pendingProfile.id === 'alexa'
+                      ? 'alexa'
+                      : pendingProfile.id === 'admin'
+                      ? 'admin123'
+                      : pendingProfile.id === 'admin007'
+                      ? 'admin10102011'
+                      : 'account password'}
+                  </code>
                 </p>
               </div>
 
