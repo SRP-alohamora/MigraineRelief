@@ -1,5 +1,5 @@
 # MigraineRelief AI 🧠⚡
-(Migraine Relief](https://srp-alohamora.github.io/MigraineRelief/)
+[`Migraine Relief'](https://srp-alohamora.github.io/MigraineRelief/)
 
 > **Precision Acute Rescue Optimization, Longitudinal Treatment-Response Intelligence & N-of-1 Neurological Decision Support**
 
